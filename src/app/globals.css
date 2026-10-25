@@ -1,0 +1,161 @@
+@import "tailwindcss";
+
+@theme inline {
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+:root {
+  --bg-tank: #090C12;
+  --bg-card: #111622;
+  --bg-card-hover: #171E2E;
+  --border-card: #1F293D;
+  --accent-gold: #F59E0B;
+  --accent-crimson: #EF4444;
+  --accent-emerald: #10B981;
+}
+
+body {
+  background-color: var(--bg-tank);
+  color: #F1F5F9;
+  font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  overflow-x: hidden;
+  min-height: 100vh;
+}
+
+/* Subtle Stage Grid Texture (Non-glowing, crisp studio floor) */
+.studio-stage-bg {
+  background-color: #080B11;
+  background-image: 
+    radial-gradient(circle at 50% 0%, rgba(30, 41, 59, 0.45) 0%, transparent 75%),
+    linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+  background-size: 100% 100%, 36px 36px, 36px 36px;
+}
+
+/* Tactile 3D Buttons (Zero AI slop, physical game feel) */
+.btn-tank-primary {
+  background-color: #F59E0B;
+  color: #0F172A;
+  font-weight: 700;
+  border-bottom: 3px solid #B45309;
+  transition: all 0.1s ease;
+}
+.btn-tank-primary:hover {
+  background-color: #FBBF24;
+}
+.btn-tank-primary:active {
+  transform: translateY(2px);
+  border-bottom-width: 1px;
+}
+
+.btn-tank-danger {
+  background-color: #EF4444;
+  color: #FFFFFF;
+  font-weight: 700;
+  border-bottom: 3px solid #B91C1C;
+  transition: all 0.1s ease;
+}
+.btn-tank-danger:hover {
+  background-color: #F87171;
+}
+.btn-tank-danger:active {
+  transform: translateY(2px);
+  border-bottom-width: 1px;
+}
+
+.btn-tank-dark {
+  background-color: #1E293B;
+  color: #F8FAFC;
+  border: 1px solid #334155;
+  border-bottom: 3px solid #0F172A;
+  transition: all 0.1s ease;
+}
+.btn-tank-dark:hover {
+  background-color: #27354A;
+  border-color: #475569;
+}
+.btn-tank-dark:active {
+  transform: translateY(2px);
+  border-bottom-width: 1px;
+}
+
+/* Speech Bubble Tails */
+.speech-bubble {
+  position: relative;
+  background-color: #141A26;
+  border: 2px solid #2A364F;
+  border-radius: 18px;
+}
+.speech-bubble-tail-left::after {
+  content: '';
+  position: absolute;
+  left: -12px;
+  top: 26px;
+  width: 0;
+  height: 0;
+  border-top: 10px solid transparent;
+  border-bottom: 10px solid transparent;
+  border-right: 12px solid #2A364F;
+}
+.speech-bubble-tail-left::before {
+  content: '';
+  position: absolute;
+  left: -9px;
+  top: 28px;
+  width: 0;
+  height: 0;
+  border-top: 8px solid transparent;
+  border-bottom: 8px solid transparent;
+  border-right: 10px solid #141A26;
+  z-index: 1;
+}
+
+/* Authentic Boardroom Rubber Stamp Effects */
+.rubber-stamp {
+  display: inline-block;
+  padding: 6px 16px;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  border-radius: 8px;
+  border: 3px dashed currentColor;
+  box-shadow: 0 0 0 2px currentColor;
+  transform: rotate(-3deg);
+  user-select: none;
+}
+
+.stamp-deal {
+  color: #10B981;
+  background-color: rgba(16, 185, 129, 0.08);
+  border-color: #10B981;
+}
+
+.stamp-reject {
+  color: #EF4444;
+  background-color: rgba(239, 68, 68, 0.08);
+  border-color: #EF4444;
+  transform: rotate(4deg);
+}
+
+.stamp-conditional {
+  color: #F59E0B;
+  background-color: rgba(245, 158, 11, 0.08);
+  border-color: #F59E0B;
+  transform: rotate(-1.5deg);
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #090C12;
+}
+::-webkit-scrollbar-thumb {
+  background: #252F44;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #384666;
+}
