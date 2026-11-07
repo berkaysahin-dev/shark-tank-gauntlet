@@ -6,14 +6,99 @@ import {
   simulateVerdict,
 } from "@/lib/simulation";
 
+const GEMINI_MODEL = "gemini-2.5-flash";
+const OPENAI_MODEL = "gpt-4o-mini";
+const LLM_TIMEOUT_MS = 20000;
+
+interface LlmKeys {
+  gemini?: string;
+  openai?: string;
+}
+
+interface GenerateOptions {
+  json?: boolean;
+  maxTokens: number;
+  temperature: number;
+}
+
+async function callGemini(key: string, prompt: string, opts: GenerateOptions): Promise<string | null> {
+  const response = await fetch(
+    `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent`,
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "x-goog-api-key": key },
+      body: JSON.stringify({
+        contents: [{ parts: [{ text: prompt }] }],
+        generationConfig: {
+          maxOutputTokens: opts.maxTokens,
+          temperature: opts.temperature,
+          // Gemini 2.5 spends output tokens on "thinking" by default; disable it
+          // so short in-character replies are not truncated.
+          thinkingConfig: { thinkingBudget: 0 },
+          ...(opts.json ? { responseMimeType: "application/json" } : {}),
+        },
+      }),
+      signal: AbortSignal.timeout(LLM_TIMEOUT_MS),
+    }
+  );
+  if (!response.ok) return null;
+  const data = await response.json();
+  return data.candidates?.[0]?.content?.parts?.[0]?.text?.trim() || null;
+}
+
+async function callOpenAI(key: string, prompt: string, opts: GenerateOptions): Promise<string | null> {
+  const response = await fetch("https://api.openai.com/v1/chat/completions", {
+    method: "POST",
+    headers: { "Content-Type": "application/json", Authorization: `Bearer ${key}` },
+    body: JSON.stringify({
+      model: OPENAI_MODEL,
+      messages: [{ role: "user", content: prompt }],
+      max_tokens: opts.maxTokens,
+      temperature: opts.temperature,
+      ...(opts.json ? { response_format: { type: "json_object" } } : {}),
+    }),
+    signal: AbortSignal.timeout(LLM_TIMEOUT_MS),
+  });
+  if (!response.ok) return null;
+  const data = await response.json();
+  return data.choices?.[0]?.message?.content?.trim() || null;
+}
+
+/** Tries Gemini first, then OpenAI. Returns null so callers fall back to the offline simulator. */
+async function generateText(keys: LlmKeys, prompt: string, opts: GenerateOptions): Promise<string | null> {
+  if (keys.gemini) {
+    try {
+      const text = await callGemini(keys.gemini, prompt, opts);
+      if (text) return text;
+    } catch {
+      // try next provider
+    }
+  }
+  if (keys.openai) {
+    try {
+      const text = await callOpenAI(keys.openai, prompt, opts);
+      if (text) return text;
+    } catch {
+      // fall through to offline simulator
+    }
+  }
+  return null;
+}
+
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const { action, juror, pitch, objection, userResponse, currentConviction, history, jurorStates, lang } = body;
+    const { action, juror, pitch, objection, userResponse, history, jurorStates, lang } = body;
     const targetLang = lang === "tr" ? "tr" : "en";
+    const rawConviction = Number(body.currentConviction);
+    const currentConviction = Number.isFinite(rawConviction) ? Math.max(0, Math.min(100, rawConviction)) : 50;
 
-    // Client-provided private API key from header, or server-side env (optional)
-    const clientGeminiKey = req.headers.get("x-gemini-key") || process.env.GEMINI_API_KEY;
+    // Client-provided private API keys (BYOK) from headers, or optional server-side env defaults.
+    const keys: LlmKeys = {
+      gemini: req.headers.get("x-gemini-key") || process.env.GEMINI_API_KEY || undefined,
+      openai: req.headers.get("x-openai-key") || process.env.OPENAI_API_KEY || undefined,
+    };
+    const hasLlm = Boolean(keys.gemini || keys.openai);
 
     // 1. Action: Generate initial objection
     if (action === "generate_objection") {
@@ -21,14 +106,13 @@ export async function POST(req: NextRequest) {
         return NextResponse.json({ error: "Missing juror or pitch data" }, { status: 400 });
       }
 
-      if (clientGeminiKey) {
-        try {
-          const jurorName = targetLang === "tr" ? juror.nameTr : juror.name;
-          const jurorTitle = targetLang === "tr" ? juror.roleTitleTr : juror.roleTitle;
-          const jurorMotto = targetLang === "tr" ? juror.mottoTr : juror.motto;
-          const jurorTemplate = targetLang === "tr" ? juror.coreObjectionTemplateTr : juror.coreObjectionTemplate;
+      if (hasLlm) {
+        const jurorName = targetLang === "tr" ? juror.nameTr : juror.name;
+        const jurorTitle = targetLang === "tr" ? juror.roleTitleTr : juror.roleTitle;
+        const jurorMotto = targetLang === "tr" ? juror.mottoTr : juror.motto;
+        const jurorTemplate = targetLang === "tr" ? juror.coreObjectionTemplateTr : juror.coreObjectionTemplate;
 
-          const prompt = `You are playing the role of a merciless, skeptical courtroom boardroom judge in a Shark Tank simulation called "The Gauntlet".
+        const prompt = `You are playing the role of a merciless, skeptical boardroom judge in a startup pitch simulation called "The Gauntlet".
 Character: ${jurorName}
 Role: ${jurorTitle} (${juror.archetype})
 Psychology: ${juror.psychology}
@@ -46,27 +130,9 @@ Task:
 Generate a direct, highly customized, ruthless 2-3 sentence objection in simple, plain, punchy ${targetLang === "tr" ? "Turkish" : "English"} targeting this specific founder's product name and premise.
 Be completely in character, skeptical, and demanding. Do NOT include greetings or polite fluff. Jump straight into the confrontation.`;
 
-          const response = await fetch(
-            `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${clientGeminiKey}`,
-            {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({
-                contents: [{ parts: [{ text: prompt }] }],
-                generationConfig: { maxOutputTokens: 250, temperature: 0.8 },
-              }),
-            }
-          );
-
-          if (response.ok) {
-            const data = await response.json();
-            const text = data.candidates?.[0]?.content?.parts?.[0]?.text?.trim();
-            if (text) {
-              return NextResponse.json({ objection: sanitizeUserInput(text, 500) });
-            }
-          }
-        } catch {
-          // Fall through to offline heuristic engine
+        const text = await generateText(keys, prompt, { maxTokens: 250, temperature: 0.8 });
+        if (text) {
+          return NextResponse.json({ objection: sanitizeUserInput(text, 500) });
         }
       }
 
@@ -82,11 +148,11 @@ Be completely in character, skeptical, and demanding. Do NOT include greetings o
       }
 
       const cleanUserResponse = sanitizeUserInput(userResponse, 1000);
+      const cleanObjection = sanitizeUserInput(typeof objection === "string" ? objection : "", 600);
 
-      if (clientGeminiKey) {
-        try {
-          const jurorName = targetLang === "tr" ? juror.nameTr : juror.name;
-          const prompt = `You are evaluating a founder's counter-argument in a brutal boardroom pitch simulation.
+      if (hasLlm) {
+        const jurorName = targetLang === "tr" ? juror.nameTr : juror.name;
+        const prompt = `You are evaluating a founder's counter-argument in a brutal boardroom pitch simulation.
 Judge: ${jurorName} (${juror.archetype})
 Psychology: ${juror.psychology}
 Fatal Trigger (instant loss if detected): ${juror.fatalTrigger}
@@ -95,7 +161,7 @@ Current Conviction: ${currentConviction}/100
 Language: Respond strictly in ${targetLang === "tr" ? "Turkish" : "English"}.
 
 Judge's Objection:
-"${objection}"
+${wrapInPromptQuarantine("judge_objection", cleanObjection)}
 
 Founder's Counter-Response:
 ${wrapInPromptQuarantine("counter_response", cleanUserResponse)}
@@ -113,44 +179,27 @@ Respond ONLY with valid JSON in this exact structure:
   "isFatal": boolean
 }`;
 
-          const response = await fetch(
-            `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${clientGeminiKey}`,
-            {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({
-                contents: [{ parts: [{ text: prompt }] }],
-                generationConfig: {
-                  responseMimeType: "application/json",
-                  maxOutputTokens: 300,
-                  temperature: 0.7,
-                },
-              }),
-            }
-          );
-
-          if (response.ok) {
-            const data = await response.json();
-            const rawJson = data.candidates?.[0]?.content?.parts?.[0]?.text?.trim();
-            if (rawJson) {
-              const parsed = JSON.parse(rawJson);
-              const delta = typeof parsed.scoreDelta === "number" ? parsed.scoreDelta : 0;
-              const resultingConviction = Math.max(0, Math.min(100, currentConviction + delta));
-              return NextResponse.json({
-                jurorReaction: sanitizeUserInput(parsed.jurorReaction, 500),
-                scoreDelta: delta,
-                resultingConviction,
-                isFatal: Boolean(parsed.isFatal),
-              });
-            }
+        const rawJson = await generateText(keys, prompt, { json: true, maxTokens: 300, temperature: 0.7 });
+        if (rawJson) {
+          try {
+            const parsed = JSON.parse(rawJson);
+            const rawDelta = typeof parsed.scoreDelta === "number" ? parsed.scoreDelta : 0;
+            const delta = Math.max(-35, Math.min(40, Math.round(rawDelta)));
+            const resultingConviction = Math.max(0, Math.min(100, currentConviction + delta));
+            return NextResponse.json({
+              jurorReaction: sanitizeUserInput(String(parsed.jurorReaction ?? ""), 500),
+              scoreDelta: delta,
+              resultingConviction,
+              isFatal: Boolean(parsed.isFatal),
+            });
+          } catch {
+            // Malformed model output: fall through to offline heuristic
           }
-        } catch {
-          // Fall through to offline heuristic
         }
       }
 
       // Offline simulation fallback
-      const simResult = simulateEvaluation(juror, pitch, objection, cleanUserResponse, currentConviction, targetLang);
+      const simResult = simulateEvaluation(juror, pitch, cleanObjection, cleanUserResponse, currentConviction, targetLang);
       return NextResponse.json(simResult);
     }
 

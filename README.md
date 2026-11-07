@@ -38,7 +38,7 @@ Most founders get polite, uncritical feedback from friends and colleagues. The G
 
 The Gauntlet was engineered with zero-retention principles to protect confidential, unreleased startup premises:
 
-- **Client-Side BYOK (Bring Your Own Key):** Users can enter their personal Google Gemini or OpenAI API key. Keys are held exclusively in the browser tab's temporary `sessionStorage`. Closing the tab purges the key permanently.
+- **Client-Side BYOK (Bring Your Own Key):** Users can enter their personal Google Gemini or OpenAI API key. Keys are kept in the browser tab's temporary `sessionStorage` (closing the tab purges them) and are sent per request, over HTTPS, to this app's own `/api/gauntlet` route, which forwards them to the provider and never logs or stores them. Gemini is tried first, then OpenAI. Only enter your key on a deployment you trust.
 - **Zero Server Persistence:** Client keys and user pitch inputs are never written to any database, file system, or external analytics service.
 - **Prompt Injection Quarantine:** User inputs are quarantined using boundary delimiters before evaluation, neutralizing prompt override or jailbreak attempts.
 - **Strict Security Headers:** Enforces Content Security Policy (CSP), `X-Frame-Options: DENY`, `X-Content-Type-Options: nosniff`, and restricted permissions policies.
@@ -84,3 +84,9 @@ To contribute a new archetype:
 ## License
 
 This project is licensed under the MIT License. See [LICENSE](LICENSE) for details.
+
+---
+
+## Disclaimer
+
+The Gauntlet is an independent project. It is not affiliated with, endorsed by, or connected to *Shark Tank*, *Dragons' Den*, Sony Pictures Television, or any of their cast or producers. Show names are used only descriptively.

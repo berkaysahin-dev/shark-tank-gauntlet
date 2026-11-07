@@ -2,7 +2,7 @@
 
 import React from "react";
 import { Language, translations } from "@/locales/i18n";
-import { Heart, Shield } from "lucide-react";
+import { Shield } from "lucide-react";
 
 const GithubIcon = ({ size = 15 }: { size?: number }) => (
   <svg
