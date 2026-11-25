@@ -50,97 +50,101 @@ export const VerdictDossier: React.FC<VerdictDossierProps> = ({
   const isConditional = verdict.termSheetStatus === "CONDITIONAL";
 
   return (
-    <div className="max-w-4xl mx-auto px-4 py-8 sm:py-12">
-      {/* Official Boardroom Dossier Container */}
-      <div className="border-2 border-slate-700/80 rounded-2xl bg-[#111624] shadow-2xl overflow-hidden relative">
+    <div className="max-w-4xl mx-auto px-4 sm:px-6 md:px-8 pt-24 sm:pt-28 pb-12 sm:pb-16">
+      <div className="relative rounded-[28px] sm:rounded-[32px] overflow-hidden bg-card-bg/90 border border-border shadow-xs dark:shadow-[0_20px_50px_rgba(0,0,0,0.5)] backdrop-blur-xl">
+        <div
+          aria-hidden="true"
+          className="absolute top-0 inset-x-8 h-px bg-gradient-to-r from-transparent via-black/10 dark:via-white/15 to-transparent pointer-events-none"
+        />
+
         {/* Top Header Strip */}
-        <div className="bg-[#171E2E] px-6 py-4 border-b-2 border-slate-700/80 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-          <div className="flex items-center gap-2.5">
-            <div className="p-1.5 rounded-lg bg-amber-500/10 border border-amber-500/30">
-              <FileCheck size={18} className="text-amber-400" />
+        <div className="px-6 py-4 border-b border-border bg-surface flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+          <div className="flex items-center gap-3">
+            <div className="p-2 rounded-xl bg-background border border-border">
+              <FileCheck size={17} className="text-accent" />
             </div>
             <div>
-              <span className="text-[10px] font-mono font-bold text-amber-400 block">
+              <span className="text-[10px] font-mono font-medium text-accent block">
                 {isTr ? "Resmi Karar Kurulu Tutanağı" : "Official Boardroom Verdict Dossier"}
               </span>
-              <h2 className="text-lg font-black text-white">
+              <h2 className="text-lg font-semibold tracking-tight text-foreground">
                 {pitch.productName}
               </h2>
             </div>
           </div>
-          <div className="flex items-center gap-3">
-            <span className="text-xs text-slate-400 font-mono">
+
+          <div className="flex items-center gap-2.5">
+            <span className="text-xs text-muted font-mono">
               {new Date().toLocaleDateString(isTr ? "tr-TR" : "en-US", {
                 year: "numeric",
                 month: "short",
                 day: "numeric",
               })}
             </span>
-            <span className="text-xs font-bold px-2.5 py-1 rounded bg-slate-900 border border-slate-700 text-slate-300">
+            <span className="text-xs font-medium px-3 py-1 rounded-full bg-background border border-border text-foreground">
               {pitch.pricingModel}
             </span>
           </div>
         </div>
 
-        <div className="p-6 sm:p-9">
-          {/* Verdict Banner with Rubber Stamp */}
+        <div className="p-6 sm:p-9 space-y-8">
+          {/* Verdict Banner */}
           <div
-            className={`p-6 rounded-2xl mb-8 border-2 relative overflow-hidden flex flex-col md:flex-row md:items-center justify-between gap-6 ${
+            className={`p-6 rounded-2xl border flex flex-col md:flex-row md:items-center justify-between gap-6 ${
               isSuccess
-                ? "bg-emerald-950/20 border-emerald-500/50"
+                ? "bg-emerald-500/[0.08] border-emerald-500/35"
                 : isConditional
-                ? "bg-amber-950/20 border-amber-500/50"
-                : "bg-rose-950/20 border-rose-500/50"
+                ? "bg-amber-500/[0.08] border-amber-500/35"
+                : "bg-rose-500/[0.08] border-rose-500/35"
             }`}
           >
             <div>
-              <div className="flex items-center gap-2 mb-2">
+              <div className="flex items-center gap-2.5 mb-2">
                 {isSuccess ? (
-                  <Award className="text-emerald-400" size={24} />
+                  <Award className="text-emerald-600 dark:text-emerald-400" size={22} />
                 ) : isConditional ? (
-                  <Sparkles className="text-amber-400" size={24} />
+                  <Sparkles className="text-amber-600 dark:text-amber-400" size={22} />
                 ) : (
-                  <AlertTriangle className="text-rose-400" size={24} />
+                  <AlertTriangle className="text-rose-600 dark:text-rose-400" size={22} />
                 )}
-                <h3 className="text-xl sm:text-2xl font-black text-white tracking-tight">
+                <h3 className="text-xl sm:text-2xl font-semibold text-foreground tracking-tight">
                   {verdict.valuationVerdict}
                 </h3>
               </div>
-              <p className="text-xs sm:text-sm text-slate-300 font-medium">
+              <p className="text-xs sm:text-sm text-muted font-normal">
                 {t.convincedCount(verdict.convincedCount, JURORS.length, verdict.rejectedCount)}
               </p>
             </div>
 
-            {/* Clean Vector-Based Rubber Stamp Element (Zero Emojis) */}
             <div className="shrink-0 flex sm:flex-col items-center sm:items-end justify-between gap-2">
               {isSuccess ? (
-                <div className="rubber-stamp stamp-deal text-xs sm:text-sm flex items-center gap-1.5">
-                  <Check size={14} strokeWidth={3} />
+                <div className="rubber-stamp stamp-deal text-xs">
+                  <Check size={13} strokeWidth={2.5} />
                   <span>{isTr ? "KABUL: YATIRIM TEKLİFİ" : "DEAL ACCEPTED"}</span>
                 </div>
               ) : isConditional ? (
-                <div className="rubber-stamp stamp-conditional text-xs sm:text-sm flex items-center gap-1.5">
-                  <AlertTriangle size={14} strokeWidth={2.5} />
+                <div className="rubber-stamp stamp-conditional text-xs">
+                  <AlertTriangle size={13} strokeWidth={2.5} />
                   <span>{isTr ? "ŞARTLI DEĞERLENDİRME" : "CONDITIONAL OFFER"}</span>
                 </div>
               ) : (
-                <div className="rubber-stamp stamp-reject text-xs sm:text-sm flex items-center gap-1.5">
-                  <X size={14} strokeWidth={3} />
-                  <span>{isTr ? "REDDEDİLDİ: TEKLİF YOK" : "REJECTED: WALK OF SHAME"}</span>
+                <div className="rubber-stamp stamp-reject text-xs">
+                  <X size={13} strokeWidth={2.5} />
+                  <span>{isTr ? "REDDEDİLDİ: TEKLİF YOK" : "REJECTED: NO DEAL"}</span>
                 </div>
               )}
 
               <div className="text-right mt-1">
-                <span className="text-[10px] font-bold text-slate-400 block">
+                <span className="text-[10px] font-medium text-muted block">
                   {t.averageConviction}
                 </span>
                 <span
-                  className={`text-2xl sm:text-3xl font-black tabular-nums ${
+                  className={`text-2xl sm:text-3xl font-semibold tabular-nums tracking-tight ${
                     isSuccess
-                      ? "text-emerald-400"
+                      ? "text-emerald-600 dark:text-emerald-400"
                       : isConditional
-                      ? "text-amber-400"
-                      : "text-rose-400"
+                      ? "text-amber-600 dark:text-amber-400"
+                      : "text-rose-600 dark:text-rose-400"
                   }`}
                 >
                   %{verdict.averageConviction}
@@ -149,14 +153,16 @@ export const VerdictDossier: React.FC<VerdictDossierProps> = ({
             </div>
           </div>
 
-          {/* Individual Juror Breakdown Cards */}
-          <div className="mb-8">
-            <h4 className="text-xs font-bold text-slate-300 mb-3 flex items-center gap-1.5">
+          {/* Individual Juror Breakdown */}
+          <div>
+            <h4 className="text-xs font-semibold text-foreground mb-3 flex items-center gap-1.5">
               <span>{t.breakdownTitle}</span>
-              <span className="text-slate-500 font-normal">({JURORS.length} {isTr ? "Jüri Üyesi" : "Board Members"})</span>
+              <span className="text-muted font-normal">
+                ({JURORS.length} {isTr ? "Jüri Üyesi" : "Board Members"})
+              </span>
             </h4>
 
-            <div className="space-y-3">
+            <div className="space-y-2.5">
               {JURORS.map((juror) => {
                 const state = jurorStates[juror.id];
                 const conv = state?.conviction ?? juror.initialConviction;
@@ -168,10 +174,8 @@ export const VerdictDossier: React.FC<VerdictDossierProps> = ({
                 return (
                   <div
                     key={juror.id}
-                    className={`p-3.5 sm:p-4 rounded-xl border-2 flex flex-col sm:flex-row sm:items-center justify-between gap-3 transition-colors ${
-                      isConvinced
-                        ? "bg-[#0F1C18] border-emerald-900/50 hover:border-emerald-700/60"
-                        : "bg-[#181116] border-rose-950/50 hover:border-rose-800/60"
+                    className={`p-3.5 sm:p-4 rounded-2xl border flex flex-col sm:flex-row sm:items-center justify-between gap-3 transition-colors bg-background ${
+                      isConvinced ? "border-emerald-500/35" : "border-border"
                     }`}
                   >
                     <div className="flex items-center gap-3">
@@ -179,53 +183,52 @@ export const VerdictDossier: React.FC<VerdictDossierProps> = ({
                         index={juror.silhouetteIndex}
                         isConvinced={isConvinced}
                         isRejected={!isConvinced}
-                        size={46}
+                        size={44}
                       />
                       <div>
-                        <div className="flex items-center gap-2">
-                          <span className="text-sm font-bold text-white">
+                        <div className="flex flex-wrap items-center gap-2">
+                          <span className="text-sm font-semibold text-foreground tracking-tight">
                             {name}
                           </span>
-                          <span className="text-[10px] font-semibold text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded border border-amber-500/20">
+                          <span className="text-[10px] font-medium text-accent bg-accent/10 px-2 py-0.5 rounded-full">
                             {archetype}
                           </span>
                         </div>
-                        <div className="text-xs text-slate-400 line-clamp-1 mt-0.5">
+                        <div className="text-xs text-muted line-clamp-1 mt-0.5">
                           {role}
                         </div>
                       </div>
                     </div>
 
                     <div className="flex items-center justify-between sm:justify-end gap-3 pl-14 sm:pl-0">
-                      {/* Gauge bar */}
-                      <div className="w-24 sm:w-32 h-2 bg-slate-900 rounded-full overflow-hidden border border-slate-800">
+                      <div className="w-24 sm:w-32 h-1.5 bg-surface-raised rounded-full overflow-hidden">
                         <div
                           className={`h-full rounded-full ${
-                            isConvinced ? "bg-emerald-400" : "bg-rose-500"
+                            isConvinced ? "bg-emerald-500" : "bg-rose-500"
                           }`}
                           style={{ width: `${conv}%` }}
                         />
                       </div>
 
-                      <div className="text-sm font-black tabular-nums text-white w-12 text-right">
+                      <div className="text-sm font-semibold tabular-nums text-foreground w-10 text-right">
                         %{conv}
                       </div>
 
                       <span
-                        className={`text-xs font-bold px-2.5 py-1 rounded-lg border flex items-center gap-1 ${
+                        className={`text-[11px] font-medium px-2.5 py-1 rounded-full border flex items-center gap-1 ${
                           isConvinced
-                            ? "bg-emerald-500/15 text-emerald-300 border-emerald-500/40"
-                            : "bg-rose-500/15 text-rose-300 border-rose-500/40"
+                            ? "bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 border-emerald-500/30"
+                            : "bg-rose-500/10 text-rose-700 dark:text-rose-300 border-rose-500/30"
                         }`}
                       >
                         {isConvinced ? (
                           <>
-                            <CheckCircle2 size={13} />
+                            <CheckCircle2 size={12} />
                             <span>{t.accepted}</span>
                           </>
                         ) : (
                           <>
-                            <XCircle size={13} />
+                            <XCircle size={12} />
                             <span>{t.rejected}</span>
                           </>
                         )}
@@ -237,44 +240,44 @@ export const VerdictDossier: React.FC<VerdictDossierProps> = ({
             </div>
           </div>
 
-          {/* Fatal Vulnerability & Strategic Action Plan */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
-            <div className="p-5 rounded-xl bg-rose-950/15 border-2 border-rose-900/40">
-              <span className="text-xs font-bold text-rose-400 block mb-2 flex items-center gap-1.5">
+          {/* Fatal Vulnerability & Strategic Remedy */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="p-5 rounded-2xl bg-background border border-rose-500/30">
+              <span className="text-xs font-semibold text-rose-600 dark:text-rose-400 mb-2 flex items-center gap-1.5">
                 <ShieldAlert size={15} />
                 <span>{t.vulnerabilityTitle}</span>
               </span>
-              <p className="text-xs sm:text-sm text-slate-200 leading-relaxed font-medium">
+              <p className="text-xs sm:text-sm text-foreground leading-relaxed font-normal">
                 {verdict.lethalVulnerability}
               </p>
             </div>
 
-            <div className="p-5 rounded-xl bg-emerald-950/15 border-2 border-emerald-900/40">
-              <span className="text-xs font-bold text-emerald-400 block mb-2 flex items-center gap-1.5">
+            <div className="p-5 rounded-2xl bg-background border border-emerald-500/30">
+              <span className="text-xs font-semibold text-emerald-600 dark:text-emerald-400 mb-2 flex items-center gap-1.5">
                 <Sparkles size={15} />
                 <span>{t.remedyTitle}</span>
               </span>
-              <p className="text-xs sm:text-sm text-slate-200 leading-relaxed font-medium">
+              <p className="text-xs sm:text-sm text-foreground leading-relaxed font-normal">
                 {verdict.strategicRemedy}
               </p>
             </div>
           </div>
 
-          {/* Action Buttons: 1-Click Share & Pitch Again */}
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-6 border-t border-slate-800">
+          {/* Action Buttons */}
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-4 border-t border-border">
             <button
               type="button"
               onClick={handleCopyShare}
-              className="w-full sm:w-auto btn-tank-primary px-6 py-3 rounded-xl font-bold text-xs flex items-center justify-center gap-2 cursor-pointer shadow-md shadow-amber-500/10"
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-7 py-3 rounded-full bg-[#0071e3] hover:bg-[#0077ed] text-white text-xs sm:text-sm font-medium shadow-[0_4px_16px_rgba(0,113,227,0.3)] hover:shadow-[0_6px_24px_rgba(0,113,227,0.4)] active:scale-95 transition-all cursor-pointer select-none"
             >
               {copied ? (
                 <>
-                  <Check size={15} strokeWidth={2.5} className="text-slate-950" />
+                  <Check size={15} />
                   <span>{t.copied}</span>
                 </>
               ) : (
                 <>
-                  <Share2 size={15} strokeWidth={2.5} />
+                  <Share2 size={15} />
                   <span>{t.copyShareText}</span>
                 </>
               )}
@@ -283,7 +286,7 @@ export const VerdictDossier: React.FC<VerdictDossierProps> = ({
             <button
               type="button"
               onClick={onReset}
-              className="w-full sm:w-auto btn-tank-dark px-6 py-3 rounded-xl font-bold text-xs flex items-center justify-center gap-2 cursor-pointer"
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full border border-border bg-surface hover:bg-surface-hover text-foreground text-xs sm:text-sm font-medium active:scale-95 transition-all cursor-pointer select-none"
             >
               <RotateCcw size={15} />
               <span>{t.resetButton}</span>

@@ -7,6 +7,9 @@ export interface Translations {
     reset: string;
     byokButton: string;
     github: string;
+    mainSite: string;
+    blog: string;
+    contact: string;
   };
   pitchSetup: {
     heroTitle: string;
@@ -87,6 +90,10 @@ export interface Translations {
     heading: string;
     subheading: string;
     license: string;
+    about: string;
+    blog: string;
+    contact: string;
+    rights: string;
   };
 }
 
@@ -98,11 +105,14 @@ export const translations: Record<Language, Translations> = {
       reset: "New Pitch",
       byokButton: "API Keys",
       github: "GitHub Repository",
+      mainSite: "berkaysahin.net",
+      blog: "Blog",
+      contact: "Contact",
     },
     pitchSetup: {
       heroTitle: "Face 5 Ruthless Pitch Judges",
       heroSubtitle:
-        "Forget gentle advice. Test your startup idea against 5 hyper-critical psychological buyer archetypes who actively try to say no.",
+        "Forget polite advice. Test your startup idea against 5 hyper-critical buyer archetypes who actively look for reasons to say no.",
       badge: "Pitch Setup",
       fillExample: "Load Example Pitch",
       productNameLabel: "Product Name",
@@ -160,18 +170,18 @@ export const translations: Record<Language, Translations> = {
       copied: "Copied to Clipboard!",
       resetButton: "Pitch a New Startup",
       shareTemplate: (name, convinced, total, avg, verdict, vuln) =>
-        `I just took my startup (${name}) through The Gauntlet.\nResult: ${convinced}/${total} judges bought in (Average Conviction: ${avg}%)\nVerdict: ${verdict}\nKey Weakness: ${vuln}\n\nTest your pitch against 5 ruthless archetypes for free:`,
+        `I just took my startup (${name}) through The Gauntlet.\nResult: ${convinced}/${total} judges bought in (Average Conviction: ${avg}%)\nVerdict: ${verdict}\nKey Weakness: ${vuln}\n\nTest your pitch against 5 ruthless archetypes for free:\nhttps://pitch.berkaysahin.net`,
     },
     byokModal: {
       title: "Private API Key Management (BYOK)",
       description:
-        "Every user brings their own API key. Your key is stored strictly inside this browser tab's temporary memory (sessionStorage). It is never saved to any database and nobody else can ever see or access it.",
+        "Bring your own API key if you want live LLM responses. Your key is stored strictly inside this browser tab's temporary memory (sessionStorage). It is never saved to any database.",
       geminiLabel: "Google Gemini API Key (Recommended)",
       geminiLink: "Get free key",
       openaiLabel: "OpenAI API Key (Alternative)",
       openaiLink: "Get key",
       privacyNote:
-        "Zero-storage guarantee: If you do not enter a key, the app runs on a built-in offline simulation engine so you can still play freely.",
+        "Zero-storage guarantee: Even without an API key, the built-in offline simulation engine runs the full boardroom experience.",
       formatWarning: "Google Gemini API keys usually start with AIzaSy.",
       saveButton: "Save to Browser",
       cancelButton: "Cancel",
@@ -184,6 +194,10 @@ export const translations: Record<Language, Translations> = {
       subheading:
         "The Gauntlet is a free, open-source, zero-retention boardroom simulator designed for founders.",
       license: "MIT Open Source License",
+      about: "About",
+      blog: "Blog",
+      contact: "Contact",
+      rights: "All rights reserved.",
     },
   },
   tr: {
@@ -193,6 +207,9 @@ export const translations: Record<Language, Translations> = {
       reset: "Yeni Girişim",
       byokButton: "API Anahtarları",
       github: "GitHub Reposu",
+      mainSite: "berkaysahin.net",
+      blog: "Blog",
+      contact: "İletişim",
     },
     pitchSetup: {
       heroTitle: "5 Acımasız Jüriyle Canlı Yüzleşin",
@@ -255,12 +272,12 @@ export const translations: Record<Language, Translations> = {
       copied: "Panoya Kopyalandı!",
       resetButton: "Yeni Bir Girişim Test Et",
       shareTemplate: (name, convinced, total, avg, verdict, vuln) =>
-        `Girişimimi (${name}) The Gauntlet jürisine sundum.\nSonuç: ${convinced}/${total} jüri ikna oldu (Ortalama: %${avg})\nKarar: ${verdict}\nEn Zayıf Halka: ${vuln}\n\nSen de 5 acımasız jüriye karşı fikrini ücretsiz test et:`,
+        `Girişimimi (${name}) The Gauntlet jürisine sundum.\nSonuç: ${convinced}/${total} jüri ikna oldu (Ortalama: %${avg})\nKarar: ${verdict}\nEn Zayıf Halka: ${vuln}\n\nSen de 5 acımasız jüriye karşı fikrini ücretsiz test et:\nhttps://pitch.berkaysahin.net`,
     },
     byokModal: {
       title: "Kişisel API Anahtarı (BYOK)",
       description:
-        "Her kullanıcı kendi API anahtarını kullanır. Anahtarınız sadece bu tarayıcı sekmesinin geçici belleğinde (sessionStorage) saklanır. Hiçbir sunucuya kaydedilmez ve sizden başka kimse asla göremez.",
+        "Canlı LLM yanıtları için kendi API anahtarınızı kullanabilirsiniz. Anahtarınız yalnızca bu tarayıcı sekmesinin geçici belleğinde (sessionStorage) saklanır; hiçbir sunucuya kaydedilmez.",
       geminiLabel: "Google Gemini API Anahtarı (Önerilen)",
       geminiLink: "Ücretsiz anahtar al",
       openaiLabel: "OpenAI API Anahtarı (Alternatif)",
@@ -279,6 +296,10 @@ export const translations: Record<Language, Translations> = {
       subheading:
         "The Gauntlet, girişimciler için açık kaynaklı ve gizlilik öncelikli bir itiraz simülatörüdür.",
       license: "MIT Açık Kaynak Lisansı",
+      about: "Hakkımda",
+      blog: "Blog",
+      contact: "İletişim",
+      rights: "Tüm hakları saklıdır.",
     },
   },
 };

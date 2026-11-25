@@ -1,8 +1,12 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
 import { KeyRound, RotateCcw } from "lucide-react";
 import { Language, translations } from "@/locales/i18n";
+import { ThemeToggle } from "@/components/ui/ThemeToggle";
+import { LanguageToggle } from "@/components/ui/LanguageToggle";
+import { cn } from "@/lib/utils";
 
 interface HeaderProps {
   lang: Language;
@@ -12,22 +16,6 @@ interface HeaderProps {
   isInDuel: boolean;
 }
 
-const GithubIcon = ({ size = 16 }: { size?: number }) => (
-  <svg
-    width={size}
-    height={size}
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-  >
-    <path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4" />
-    <path d="M9 18c-4.51 2-5-2-7-2" />
-  </svg>
-);
-
 export const Header: React.FC<HeaderProps> = ({
   lang,
   onLanguageChange,
@@ -36,91 +24,217 @@ export const Header: React.FC<HeaderProps> = ({
   isInDuel,
 }) => {
   const t = translations[lang].header;
+  const [scrolled, setScrolled] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 16);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  useEffect(() => {
+    document.body.style.overflow = menuOpen ? "hidden" : "";
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [menuOpen]);
+
+  const isSolid = scrolled || menuOpen;
+
+  const externalLinks = [
+    { label: t.mainSite, href: "https://berkaysahin.net" },
+    { label: t.blog, href: "https://berkaysahin.net/blog" },
+    { label: t.contact, href: "https://berkaysahin.net/contact" },
+  ];
+
+  const linkClass = (active?: boolean) =>
+    cn(
+      "text-[12px] tracking-normal font-medium transition-all duration-200 py-1.5 px-2.5 rounded-full whitespace-nowrap",
+      active
+        ? "text-foreground bg-surface shadow-xs font-semibold"
+        : "text-muted hover:text-foreground hover:bg-surface/50"
+    );
 
   return (
-    <header className="w-full border-b border-slate-800/80 bg-[#090C12]/90 backdrop-blur-md sticky top-0 z-40 transition-colors">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-3">
-        {/* Typographic Title - No top logo, no badge */}
-        <div className="flex items-center gap-3">
-          <button
-            type="button"
-            onClick={onReset}
-            className="flex flex-col text-left group cursor-pointer"
-          >
-            <div className="flex items-center gap-2">
-              <span className="font-extrabold text-lg sm:text-xl tracking-tight text-white font-sans group-hover:text-amber-400 transition-colors">
-                {t.title}
-              </span>
-            </div>
-            <p className="text-xs text-slate-400 font-medium hidden sm:block">
-              {t.subtitle}
-            </p>
-          </button>
-        </div>
-
-        {/* Control Toolbar */}
-        <div className="flex items-center gap-2 sm:gap-3 text-xs">
-          {/* Reset / Start Over if in duel */}
-          {isInDuel && (
+    <>
+      <header
+        className={cn(
+          "fixed top-0 left-0 right-0 z-50 safe-top isolate",
+          "border-b transition-[background-color,border-color,box-shadow,backdrop-filter] duration-300 ease-out",
+          isSolid
+            ? "bg-background/85 backdrop-blur-2xl backdrop-saturate-180 border-border shadow-xs"
+            : "bg-background/60 backdrop-blur-xl border-border/60"
+        )}
+      >
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 md:px-8 h-12 flex items-center justify-between gap-3">
+          {/* Apple-style Monogram + Subdomain Indicator */}
+          <div className="flex items-center gap-2 shrink-0">
+            <a
+              href="https://berkaysahin.net"
+              className="flex items-center gap-0.5 text-[14px] font-semibold tracking-tight text-foreground hover:opacity-85 transition-opacity"
+              aria-label="berkaysahin.net"
+            >
+              <span>berkay</span>
+              <span className="text-accent text-[16px] leading-none">.</span>
+            </a>
+            <span className="text-border text-xs select-none">/</span>
             <button
               type="button"
               onClick={onReset}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-700/80 bg-slate-800/60 hover:bg-slate-700/70 text-slate-200 font-semibold transition-all cursor-pointer"
+              className="text-[12px] font-medium text-muted hover:text-foreground transition-colors cursor-pointer whitespace-nowrap"
             >
-              <RotateCcw size={13} />
-              <span>{t.reset}</span>
-            </button>
-          )}
-
-          {/* BYOK Button */}
-          <button
-            type="button"
-            onClick={onOpenKeys}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-700/80 bg-slate-800/80 hover:bg-slate-700 text-slate-200 font-semibold transition-all hover:border-slate-600 shadow-sm cursor-pointer"
-          >
-            <KeyRound size={13} className="text-amber-400" />
-            <span className="hidden sm:inline">{t.byokButton}</span>
-            <span className="sm:hidden">API</span>
-          </button>
-
-          {/* Language Switcher */}
-          <div className="flex items-center border border-slate-700/80 rounded-lg overflow-hidden bg-slate-900/80 p-0.5">
-            <button
-              type="button"
-              onClick={() => onLanguageChange("en")}
-              className={`px-2 py-1 text-[11px] font-bold rounded transition-all cursor-pointer ${
-                lang === "en"
-                  ? "bg-amber-500 text-slate-950 shadow-sm"
-                  : "text-slate-400 hover:text-slate-200"
-              }`}
-            >
-              EN
-            </button>
-            <button
-              type="button"
-              onClick={() => onLanguageChange("tr")}
-              className={`px-2 py-1 text-[11px] font-bold rounded transition-all cursor-pointer ${
-                lang === "tr"
-                  ? "bg-amber-500 text-slate-950 shadow-sm"
-                  : "text-slate-400 hover:text-slate-200"
-              }`}
-            >
-              TR
+              pitch
             </button>
           </div>
 
-          {/* GitHub Link */}
-          <a
-            href="https://github.com/berkaysahin-dev/shark-tank-gauntlet"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="p-2 rounded-lg border border-slate-800 text-slate-400 hover:text-white hover:border-slate-700 bg-slate-900/60 transition-colors"
-            aria-label="GitHub"
+          {/* Center Navigation Links (Apple Style) */}
+          <nav
+            className="hidden sm:flex items-center gap-1 text-[12px]"
+            aria-label="Main navigation"
           >
-            <GithubIcon size={16} />
-          </a>
+            <button
+              type="button"
+              onClick={onReset}
+              className={cn(linkClass(true), "cursor-pointer")}
+            >
+              Gauntlet
+            </button>
+            {externalLinks.map((link) => (
+              <a
+                key={link.href}
+                href={link.href}
+                className={linkClass(false)}
+              >
+                {link.label}
+              </a>
+            ))}
+          </nav>
+
+          {/* Right Actions: Reset, BYOK API, ThemeToggle, LanguageToggle, Mobile Hamburger */}
+          <div className="flex items-center gap-2 shrink-0">
+            {isInDuel && (
+              <button
+                type="button"
+                onClick={onReset}
+                title={t.reset}
+                className="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-surface hover:bg-surface-hover border border-border text-foreground text-[11px] font-medium transition-all active:scale-95 cursor-pointer whitespace-nowrap select-none"
+              >
+                <RotateCcw size={11} />
+                <span>{t.reset}</span>
+              </button>
+            )}
+
+            <button
+              type="button"
+              onClick={onOpenKeys}
+              title={t.byokButton}
+              className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-surface hover:bg-surface-hover border border-border text-foreground text-[11px] font-medium transition-all active:scale-95 cursor-pointer whitespace-nowrap select-none"
+            >
+              <KeyRound size={11} className="text-accent" />
+              <span className="hidden sm:inline">{t.byokButton}</span>
+              <span className="sm:hidden">API</span>
+            </button>
+
+            <ThemeToggle />
+
+            <LanguageToggle lang={lang} onLanguageChange={onLanguageChange} />
+
+            {/* Mobile Hamburger Button */}
+            <button
+              type="button"
+              onClick={() => setMenuOpen((prev) => !prev)}
+              className="sm:hidden w-8 h-8 flex flex-col items-center justify-center gap-1 rounded-full bg-surface border border-border text-foreground cursor-pointer"
+              aria-label={menuOpen ? "Close menu" : "Open menu"}
+              aria-expanded={menuOpen}
+            >
+              <span
+                className={cn(
+                  "block w-4 h-[1.5px] bg-foreground transition-all duration-300 origin-center",
+                  menuOpen && "rotate-45 translate-y-[2.5px]"
+                )}
+              />
+              <span
+                className={cn(
+                  "block w-4 h-[1.5px] bg-foreground transition-all duration-300 origin-center",
+                  menuOpen && "-rotate-45 -translate-y-[2.5px]"
+                )}
+              />
+            </button>
+          </div>
         </div>
-      </div>
-    </header>
+      </header>
+
+      {/* Apple-style Fullscreen Mobile Overlay Menu */}
+      <AnimatePresence>
+        {menuOpen && (
+          <motion.nav
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            transition={{ duration: 0.25, ease: "easeOut" }}
+            className="fixed inset-0 z-[60] bg-background/95 backdrop-blur-2xl sm:hidden flex flex-col justify-between safe-top safe-bottom px-6 pt-20 pb-8"
+            aria-label="Mobile navigation"
+          >
+            <div className="flex flex-col space-y-6 pt-4">
+              <span className="text-[11px] font-semibold uppercase tracking-[0.16em] text-muted">
+                {lang === "tr" ? "Menü" : "Menu"}
+              </span>
+              <div className="flex flex-col space-y-4">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setMenuOpen(false);
+                    onReset();
+                  }}
+                  className="text-left text-2xl font-semibold tracking-tight py-1 text-accent cursor-pointer"
+                >
+                  The Gauntlet
+                </button>
+                {externalLinks.map((link) => (
+                  <a
+                    key={link.href}
+                    href={link.href}
+                    onClick={() => setMenuOpen(false)}
+                    className="text-2xl font-semibold tracking-tight py-1 block text-muted hover:text-foreground transition-colors"
+                  >
+                    {link.label}
+                  </a>
+                ))}
+              </div>
+
+              {isInDuel && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setMenuOpen(false);
+                    onReset();
+                  }}
+                  className="inline-flex items-center justify-center gap-2 w-full mt-4 py-3 rounded-full bg-[#0071e3] hover:bg-[#0077ed] text-white font-medium text-sm transition-all shadow-md shadow-blue-500/20 active:scale-95 cursor-pointer"
+                >
+                  <RotateCcw size={15} />
+                  <span>{t.reset}</span>
+                </button>
+              )}
+            </div>
+
+            <div className="pt-6 border-t border-border flex items-center justify-between gap-3">
+              <button
+                type="button"
+                onClick={() => {
+                  setMenuOpen(false);
+                  onOpenKeys();
+                }}
+                className="flex-1 inline-flex items-center justify-center gap-2 py-2.5 rounded-full bg-surface border border-border text-foreground text-xs font-medium active:scale-95 transition-all cursor-pointer"
+              >
+                <KeyRound size={13} className="text-accent" />
+                <span>{t.byokButton}</span>
+              </button>
+            </div>
+          </motion.nav>
+        )}
+      </AnimatePresence>
+    </>
   );
 };

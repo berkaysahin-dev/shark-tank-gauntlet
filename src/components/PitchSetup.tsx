@@ -7,6 +7,7 @@ import { Language, translations } from "@/locales/i18n";
 import { playGavel, playTurnTick } from "@/lib/audio";
 import { JURORS } from "@/config/personas";
 import { SharkAvatar } from "./SharkAvatar";
+import { AppleDivider } from "@/components/ui/AppleDivider";
 
 interface PitchSetupProps {
   lang: Language;
@@ -16,8 +17,6 @@ interface PitchSetupProps {
 interface QuickPreset {
   id: string;
   icon: React.ReactNode;
-  titleEn: string;
-  titleTr: string;
   name: string;
   oneLinerEn: string;
   oneLinerTr: string;
@@ -32,9 +31,7 @@ interface QuickPreset {
 const QUICK_PRESETS: QuickPreset[] = [
   {
     id: "roastsheet",
-    icon: <Table2 size={20} className="text-amber-400" />,
-    titleEn: "RoastSheet",
-    titleTr: "RoastSheet",
+    icon: <Table2 size={18} className="text-accent" />,
     name: "RoastSheet",
     taglineEn: "AI Excel Auditor",
     taglineTr: "Finansal Hata Denetçisi",
@@ -46,10 +43,8 @@ const QUICK_PRESETS: QuickPreset[] = [
     priceTr: "Kullanıcı başı aylık 29$",
   },
   {
-    id: "patigo",
-    icon: <ShieldAlert size={20} className="text-amber-400" />,
-    titleEn: "SafePulse",
-    titleTr: "SafePulse",
+    id: "safepulse",
+    icon: <ShieldAlert size={18} className="text-accent" />,
     name: "SafePulse",
     taglineEn: "Vendor Security Auditor",
     taglineTr: "Tedarikçi Güvenlik Denetimi",
@@ -62,9 +57,7 @@ const QUICK_PRESETS: QuickPreset[] = [
   },
   {
     id: "notab",
-    icon: <Zap size={20} className="text-amber-400" />,
-    titleEn: "NoTab Flow",
-    titleTr: "NoTab Flow",
+    icon: <Zap size={18} className="text-accent" />,
     name: "NoTab Flow",
     taglineEn: "Headless Approvals",
     taglineTr: "Sekmesiz Onay Sistemi",
@@ -76,10 +69,8 @@ const QUICK_PRESETS: QuickPreset[] = [
     priceTr: "Ekip başı aylık 99$",
   },
   {
-    id: "gitcaffeine",
-    icon: <Terminal size={20} className="text-amber-400" />,
-    titleEn: "DevRelay",
-    titleTr: "DevRelay",
+    id: "devrelay",
+    icon: <Terminal size={18} className="text-accent" />,
     name: "DevRelay",
     taglineEn: "Automated Deploy Guard",
     taglineTr: "Otomatik Dağıtım Koruması",
@@ -130,45 +121,58 @@ export const PitchSetup: React.FC<PitchSetupProps> = ({ lang, onStartGauntlet })
   };
 
   return (
-    <div className="max-w-4xl mx-auto px-4 py-8 sm:py-12">
-      {/* Clean Editorial Headline (No badges, no cliché badges) */}
-      <div className="mb-10 text-center">
-        <h1 className="text-3xl sm:text-5xl font-black tracking-tight text-white mb-4 leading-tight">
-          {isTr ? (
-            <>
-              Girişimin <span className="text-amber-400 underline decoration-amber-500/40 decoration-4">Karar Masası</span> Karşısında Ayakta Kalabilecek mi?
-            </>
-          ) : (
-            <>
-              Can Your Startup Survive <span className="text-amber-400 underline decoration-amber-500/40 decoration-4">The Gauntlet</span>?
-            </>
-          )}
+    <div className="max-w-4xl mx-auto px-4 sm:px-6 md:px-8 pt-24 sm:pt-32 pb-12 sm:pb-16 space-y-10 sm:space-y-12">
+      {/* Apple Editorial Hero */}
+      <div className="text-center space-y-4">
+        <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-border bg-surface text-[11px] font-medium text-muted select-none">
+          <span className="w-1.5 h-1.5 rounded-full bg-accent" />
+          <span>pitch.berkaysahin.net</span>
+        </span>
+
+        <h1 className="text-3xl sm:text-5xl md:text-6xl font-semibold tracking-[-0.035em] apple-shimmer-text leading-[1.15] block mx-auto">
+          {isTr ? "The Gauntlet" : "The Gauntlet"}
         </h1>
 
-        <p className="text-sm sm:text-base text-slate-300 max-w-2xl mx-auto leading-relaxed">
+        <p className="text-base sm:text-xl font-medium tracking-tight text-foreground max-w-2xl mx-auto">
+          {isTr
+            ? "Girişiminiz karar masası karşısında ayakta kalabilecek mi?"
+            : "Can your startup survive five ruthless buyer archetypes?"}
+        </p>
+
+        <p className="text-xs sm:text-sm text-muted max-w-xl mx-auto leading-relaxed font-normal">
           {isTr
             ? "Kibar ve yüzeysel övgüleri unutun. Ürününüzü satın almamak için her açığı zorlayan 5 farklı psikolojik alıcı arketipinin karşısına çıkın."
-            : "Forget polite, superficial praise. Test your value proposition against 5 hyper-critical buyer archetypes who actively probe for fatal flaws before buying."}
+            : "Forget polite praise. Test your value proposition against 5 hyper-critical buyer archetypes who actively probe for fatal flaws before buying."}
         </p>
       </div>
 
-      {/* Roster Preview Bar */}
-      <div className="mb-8 p-4 rounded-2xl border-2 border-slate-800 bg-[#101522]/90 shadow-xl">
-        <div className="flex items-center justify-between mb-3 text-xs font-bold text-slate-400">
-          <span>{isTr ? "Masadaki Karar Kurulu" : "The Boardroom Panel"}</span>
-          <span className="text-amber-400">{isTr ? "5 Farklı İtiraz Açısı" : "5 Distinct Angles"}</span>
+      <AppleDivider />
+
+      {/* Boardroom Panel Preview */}
+      <div className="relative rounded-3xl border border-border bg-card-bg/90 p-5 sm:p-6 overflow-hidden">
+        <div
+          aria-hidden="true"
+          className="absolute top-0 inset-x-8 h-px bg-gradient-to-r from-transparent via-black/10 dark:via-white/15 to-transparent pointer-events-none"
+        />
+        <div className="flex items-center justify-between mb-4 text-xs">
+          <span className="font-semibold text-foreground tracking-tight">
+            {isTr ? "Masadaki Karar Kurulu" : "The Boardroom Panel"}
+          </span>
+          <span className="text-[11px] font-medium text-accent">
+            {isTr ? "5 Farklı İtiraz Açısı" : "5 Distinct Angles"}
+          </span>
         </div>
-        <div className="grid grid-cols-5 gap-2 sm:gap-3">
+        <div className="grid grid-cols-2 sm:grid-cols-5 gap-2.5 sm:gap-3">
           {JURORS.map((juror) => (
             <div
               key={juror.id}
-              className="flex flex-col items-center text-center p-2 rounded-xl bg-slate-900/60 border border-slate-800/80 hover:border-slate-700 transition-colors"
+              className="flex flex-col items-center text-center p-3 rounded-2xl bg-background border border-border transition-colors"
             >
               <SharkAvatar index={juror.silhouetteIndex} size={44} />
-              <span className="text-[11px] font-bold text-slate-200 mt-1.5 truncate max-w-full">
+              <span className="text-[12px] font-semibold text-foreground mt-2 truncate max-w-full tracking-tight">
                 {isTr ? juror.nameTr : juror.name}
               </span>
-              <span className="text-[10px] text-amber-400/90 font-medium truncate max-w-full">
+              <span className="text-[10px] text-muted font-medium truncate max-w-full">
                 {isTr ? juror.archetypeTr : juror.archetype}
               </span>
             </div>
@@ -176,13 +180,15 @@ export const PitchSetup: React.FC<PitchSetupProps> = ({ lang, onStartGauntlet })
         </div>
       </div>
 
-      {/* Quick-Play Pitch Cards (Vector Icons - Zero Emojis) */}
-      <div className="mb-8">
-        <div className="flex items-center justify-between mb-3 text-xs font-bold text-slate-400">
-          <span className="flex items-center gap-1.5">
-            <span>{isTr ? "Hızlı Örnek Seç (Tek Tıkla Doldur)" : "Quick-Play Presets (1-Click)"}</span>
+      {/* Quick-Play Presets */}
+      <div className="space-y-3">
+        <div className="flex items-center justify-between text-xs">
+          <span className="font-medium text-foreground">
+            {isTr ? "Hızlı Örnek Seç (Tek Tıkla Doldur)" : "Quick-Play Presets (1-Click)"}
           </span>
-          <span className="text-slate-500">{isTr ? "veya aşağıya kendiniz yazın" : "or write your own below"}</span>
+          <span className="text-muted text-[11px]">
+            {isTr ? "veya aşağıya kendiniz yazın" : "or write your own below"}
+          </span>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
@@ -193,29 +199,29 @@ export const PitchSetup: React.FC<PitchSetupProps> = ({ lang, onStartGauntlet })
                 key={preset.id}
                 type="button"
                 onClick={() => applyPreset(preset)}
-                className={`p-3.5 rounded-xl border-2 text-left transition-all duration-150 cursor-pointer ${
+                className={`p-4 rounded-2xl border text-left transition-all duration-200 cursor-pointer select-none ${
                   isSelected
-                    ? "border-amber-500 bg-amber-500/10 shadow-md shadow-amber-500/10"
-                    : "border-slate-800 bg-[#121724] hover:border-slate-700 hover:bg-[#161D2E]"
+                    ? "border-accent bg-accent/[0.06] ring-1 ring-accent/30"
+                    : "border-border bg-card-bg/75 hover:bg-card-hover"
                 }`}
               >
-                <div className="flex items-center justify-between mb-2">
-                  <div className="p-1.5 rounded-lg bg-slate-900 border border-slate-700/80">
+                <div className="flex items-center justify-between mb-2.5">
+                  <div className="p-2 rounded-xl bg-background border border-border">
                     {preset.icon}
                   </div>
                   {isSelected && (
-                    <span className="text-[10px] font-bold text-amber-300 bg-amber-500/20 px-2 py-0.5 rounded-full border border-amber-500/40">
+                    <span className="text-[10px] font-semibold text-accent bg-accent/10 px-2 py-0.5 rounded-full">
                       {isTr ? "Seçildi" : "Selected"}
                     </span>
                   )}
                 </div>
-                <div className="font-bold text-sm text-white mb-0.5">
+                <div className="font-semibold text-sm text-foreground tracking-tight mb-0.5">
                   {preset.name}
                 </div>
-                <div className="text-xs text-amber-400/80 font-medium mb-1.5">
+                <div className="text-[11px] text-accent font-medium mb-1.5">
                   {isTr ? preset.taglineTr : preset.taglineEn}
                 </div>
-                <div className="text-[11px] text-slate-400 line-clamp-2 leading-relaxed">
+                <div className="text-[11px] text-muted line-clamp-2 leading-relaxed">
                   {isTr ? preset.oneLinerTr : preset.oneLinerEn}
                 </div>
               </button>
@@ -224,37 +230,38 @@ export const PitchSetup: React.FC<PitchSetupProps> = ({ lang, onStartGauntlet })
         </div>
       </div>
 
-      {/* Main Pitch Card Form */}
-      <form
-        onSubmit={handleStart}
-        className="border-2 border-slate-800 rounded-2xl p-6 sm:p-8 bg-[#121724] shadow-2xl relative"
-      >
-        <div className="flex items-center justify-between pb-4 mb-6 border-b border-slate-800">
-          <div>
-            <h2 className="text-base sm:text-lg font-bold text-white">
-              {isTr ? "Girişim Dosyası" : "Startup Pitch Docket"}
-            </h2>
-            <p className="text-xs text-slate-400 mt-0.5">
-              {isTr ? "Kurulun önüne koyacağınız resmi bilgiler" : "The official dossier presented to the board"}
-            </p>
-          </div>
-          <span className="text-[11px] font-mono font-bold text-slate-400 bg-slate-900 px-2.5 py-1 rounded border border-slate-800">
-            {isTr ? "Adım 01/03" : "Stage 01/03"}
-          </span>
-        </div>
+      {/* Main Pitch Docket Card (Exact Apple Contact Card Style) */}
+      <div className="relative rounded-[28px] sm:rounded-[32px] p-6 sm:p-9 overflow-hidden bg-card-bg/90 border border-border shadow-xs dark:shadow-[0_20px_50px_rgba(0,0,0,0.5)] backdrop-blur-xl">
+        <div
+          aria-hidden="true"
+          className="absolute top-0 inset-x-8 h-px bg-gradient-to-r from-transparent via-black/10 dark:via-white/15 to-transparent pointer-events-none"
+        />
 
-        {error && (
-          <div className="mb-6 p-3.5 rounded-xl bg-rose-500/15 border-2 border-rose-500/40 text-rose-300 text-xs font-semibold flex items-center gap-2.5">
-            <AlertCircle size={16} className="text-rose-400 shrink-0" />
-            <span>{error}</span>
+        <form onSubmit={handleStart} className="relative z-10 space-y-5">
+          <div className="flex items-center justify-between pb-4 border-b border-border">
+            <div>
+              <h2 className="text-base sm:text-lg font-semibold tracking-tight text-foreground">
+                {isTr ? "Girişim Dosyası" : "Startup Pitch Docket"}
+              </h2>
+              <p className="text-xs text-muted mt-0.5">
+                {isTr ? "Kurulun önüne koyacağınız resmi bilgiler" : "The official dossier presented to the board"}
+              </p>
+            </div>
+            <span className="text-[11px] font-mono font-medium text-muted bg-background px-2.5 py-1 rounded-full border border-border">
+              {isTr ? "Adım 01/03" : "Stage 01/03"}
+            </span>
           </div>
-        )}
 
-        <div className="space-y-5">
-          {/* Product Name */}
+          {error && (
+            <div className="p-3.5 rounded-2xl bg-rose-500/10 border border-rose-500/30 text-rose-600 dark:text-rose-400 text-xs font-medium flex items-center gap-2.5">
+              <AlertCircle size={16} className="shrink-0" />
+              <span>{error}</span>
+            </div>
+          )}
+
           <div>
-            <label className="block text-xs font-bold text-slate-200 mb-1.5">
-              01. {t.productNameLabel} <span className="text-rose-400">*</span>
+            <label className="block text-[12px] font-medium tracking-tight text-muted mb-2">
+              01. {t.productNameLabel} <span className="text-rose-500">*</span>
             </label>
             <input
               type="text"
@@ -265,17 +272,16 @@ export const PitchSetup: React.FC<PitchSetupProps> = ({ lang, onStartGauntlet })
               }}
               placeholder={t.productNamePlaceholder}
               maxLength={100}
-              className="w-full bg-[#0B0F19] border-2 border-slate-800 rounded-xl px-4 py-3 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-amber-500 transition-colors font-medium"
+              className="w-full rounded-2xl px-4 py-3 text-xs sm:text-sm text-foreground bg-background border border-border placeholder:text-muted/50 focus:outline-none focus:border-accent focus:ring-4 focus:ring-accent/15 transition-all duration-200"
             />
           </div>
 
-          {/* One-Liner */}
           <div>
-            <div className="flex items-center justify-between mb-1.5">
-              <label className="text-xs font-bold text-slate-200">
-                02. {t.oneLinerLabel} <span className="text-rose-400">*</span>
+            <div className="flex items-center justify-between mb-2">
+              <label className="text-[12px] font-medium tracking-tight text-muted">
+                02. {t.oneLinerLabel} <span className="text-rose-500">*</span>
               </label>
-              <span className="text-[11px] text-slate-500 font-mono">
+              <span className="text-[11px] text-muted font-mono">
                 {oneLiner.length}/300
               </span>
             </div>
@@ -288,19 +294,18 @@ export const PitchSetup: React.FC<PitchSetupProps> = ({ lang, onStartGauntlet })
               }}
               placeholder={t.oneLinerPlaceholder}
               maxLength={300}
-              className="w-full bg-[#0B0F19] border-2 border-slate-800 rounded-xl px-4 py-3 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-amber-500 transition-colors font-medium resize-none leading-relaxed"
+              className="w-full rounded-2xl px-4 py-3 text-xs sm:text-sm text-foreground bg-background border border-border placeholder:text-muted/50 focus:outline-none focus:border-accent focus:ring-4 focus:ring-accent/15 transition-all duration-200 resize-none leading-relaxed"
             />
-            <p className="text-[11px] text-slate-500 mt-1">
+            <p className="text-[11px] text-muted mt-1.5">
               {isTr
                 ? "İpucu: Kurulun dikkat süresi kısadır. Ne yaptığınızı ve kimi kurtardığınızı net söyleyin."
                 : "Tip: Keep it punchy. What specific pain do you kill and for whom?"}
             </p>
           </div>
 
-          {/* Target Audience & Pricing in 2 Columns */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
             <div>
-              <label className="block text-xs font-bold text-slate-200 mb-1.5">
+              <label className="block text-[12px] font-medium tracking-tight text-muted mb-2">
                 03. {t.targetAudienceLabel}
               </label>
               <input
@@ -312,12 +317,12 @@ export const PitchSetup: React.FC<PitchSetupProps> = ({ lang, onStartGauntlet })
                 }}
                 placeholder={t.targetAudiencePlaceholder}
                 maxLength={100}
-                className="w-full bg-[#0B0F19] border-2 border-slate-800 rounded-xl px-4 py-3 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-amber-500 transition-colors font-medium"
+                className="w-full rounded-2xl px-4 py-3 text-xs sm:text-sm text-foreground bg-background border border-border placeholder:text-muted/50 focus:outline-none focus:border-accent focus:ring-4 focus:ring-accent/15 transition-all duration-200"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-slate-200 mb-1.5">
+              <label className="block text-[12px] font-medium tracking-tight text-muted mb-2">
                 04. {t.pricingModelLabel}
               </label>
               <input
@@ -329,28 +334,27 @@ export const PitchSetup: React.FC<PitchSetupProps> = ({ lang, onStartGauntlet })
                 }}
                 placeholder={t.pricingModelPlaceholder}
                 maxLength={100}
-                className="w-full bg-[#0B0F19] border-2 border-slate-800 rounded-xl px-4 py-3 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-amber-500 transition-colors font-medium"
+                className="w-full rounded-2xl px-4 py-3 text-xs sm:text-sm text-foreground bg-background border border-border placeholder:text-muted/50 focus:outline-none focus:border-accent focus:ring-4 focus:ring-accent/15 transition-all duration-200"
               />
             </div>
           </div>
-        </div>
 
-        {/* Action Submit Button */}
-        <div className="mt-8 pt-6 border-t border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <div className="text-xs text-slate-400 text-center sm:text-left flex items-center gap-1.5">
-            <CheckCircle2 size={15} className="text-emerald-400 shrink-0" />
-            <span>{isTr ? "Sıfır veri kaydı, tam yerel gizlilik" : "Zero retention, complete local privacy"}</span>
+          <div className="pt-4 border-t border-border flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div className="text-xs text-muted text-center sm:text-left flex items-center gap-1.5">
+              <CheckCircle2 size={15} className="text-emerald-600 dark:text-emerald-400 shrink-0" />
+              <span>{isTr ? "Sıfır veri kaydı, tam yerel gizlilik" : "Zero retention, complete local privacy"}</span>
+            </div>
+
+            <button
+              type="submit"
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-7 py-3 rounded-full bg-[#0071e3] hover:bg-[#0077ed] text-white text-xs sm:text-sm font-medium shadow-[0_4px_16px_rgba(0,113,227,0.3)] hover:shadow-[0_6px_24px_rgba(0,113,227,0.4)] active:scale-95 transition-all cursor-pointer select-none"
+            >
+              <span>{isTr ? "Masaya Çık ve Savun" : "Enter the Boardroom"}</span>
+              <ArrowRight size={16} />
+            </button>
           </div>
-
-          <button
-            type="submit"
-            className="w-full sm:w-auto btn-tank-primary px-8 py-3.5 rounded-xl font-bold text-sm tracking-wide flex items-center justify-center gap-2 cursor-pointer shadow-lg shadow-amber-500/20"
-          >
-            <span>{isTr ? "Masaya Çık ve Savun" : "Enter the Boardroom"}</span>
-            <ArrowRight size={17} strokeWidth={2.5} />
-          </button>
-        </div>
-      </form>
+        </form>
+      </div>
     </div>
   );
 };

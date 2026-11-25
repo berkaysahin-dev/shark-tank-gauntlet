@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
+import { BackgroundGrid } from "@/components/ui/BackgroundGrid";
 import { PitchSetup } from "@/components/PitchSetup";
 import { BoardroomArena } from "@/components/BoardroomArena";
 import { VerdictDossier } from "@/components/VerdictDossier";
@@ -19,7 +20,13 @@ import { fetchVerdictSummary } from "@/lib/llm";
 type GauntletStage = "SETUP" | "ARENA" | "VERDICT";
 
 export default function HomePage() {
-  const [lang, setLang] = useState<Language>("en");
+  const [lang, setLang] = useState<Language>(() => {
+    if (typeof window !== "undefined") {
+      const saved = (localStorage.getItem("locale") || localStorage.getItem("gauntlet_lang")) as Language;
+      if (saved === "en" || saved === "tr") return saved;
+    }
+    return "tr";
+  });
   const [stage, setStage] = useState<GauntletStage>("SETUP");
   const [pitch, setPitch] = useState<PitchData | null>(null);
   const [history, setHistory] = useState<TurnExchange[]>([]);
@@ -28,26 +35,13 @@ export default function HomePage() {
   const [isKeyModalOpen, setIsKeyModalOpen] = useState(false);
 
   useEffect(() => {
-    // Detect browser preference or saved preference
-    if (typeof window !== "undefined") {
-      let initialLang: Language = "en";
-      const savedLang = localStorage.getItem("gauntlet_lang") as Language;
-      if (savedLang === "en" || savedLang === "tr") {
-        initialLang = savedLang;
-      } else {
-        const browserLang = navigator.language.toLowerCase();
-        if (browserLang.startsWith("tr")) {
-          initialLang = "tr";
-        }
-      }
-      setLang(initialLang);
-      document.documentElement.lang = initialLang;
-    }
-  }, []);
+    document.documentElement.lang = lang;
+  }, [lang]);
 
   const handleLanguageChange = (newLang: Language) => {
     setLang(newLang);
     if (typeof window !== "undefined") {
+      localStorage.setItem("locale", newLang);
       localStorage.setItem("gauntlet_lang", newLang);
       document.documentElement.lang = newLang;
     }
@@ -80,47 +74,50 @@ export default function HomePage() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col studio-stage-bg text-slate-100 relative">
-      <Header
-        lang={lang}
-        onLanguageChange={handleLanguageChange}
-        onOpenKeys={() => setIsKeyModalOpen(true)}
-        onReset={handleReset}
-        isInDuel={stage !== "SETUP"}
-      />
+    <>
+      <BackgroundGrid />
+      <div className="relative z-10 min-h-screen flex flex-col">
+        <Header
+          lang={lang}
+          onLanguageChange={handleLanguageChange}
+          onOpenKeys={() => setIsKeyModalOpen(true)}
+          onReset={handleReset}
+          isInDuel={stage !== "SETUP"}
+        />
 
-      <main className="flex-1 flex flex-col justify-center">
-        {stage === "SETUP" && (
-          <PitchSetup lang={lang} onStartGauntlet={handleStartGauntlet} />
-        )}
+        <main id="main-content" className="flex-1 flex flex-col justify-center">
+          {stage === "SETUP" && (
+            <PitchSetup lang={lang} onStartGauntlet={handleStartGauntlet} />
+          )}
 
-        {stage === "ARENA" && pitch && (
-          <BoardroomArena
-            pitch={pitch}
-            lang={lang}
-            onFinishGauntlet={handleFinishGauntlet}
-          />
-        )}
+          {stage === "ARENA" && pitch && (
+            <BoardroomArena
+              pitch={pitch}
+              lang={lang}
+              onFinishGauntlet={handleFinishGauntlet}
+            />
+          )}
 
-        {stage === "VERDICT" && pitch && verdict && (
-          <VerdictDossier
-            pitch={pitch}
-            history={history}
-            jurorStates={jurorStates}
-            verdict={verdict}
-            lang={lang}
-            onReset={handleReset}
-          />
-        )}
-      </main>
+          {stage === "VERDICT" && pitch && verdict && (
+            <VerdictDossier
+              pitch={pitch}
+              history={history}
+              jurorStates={jurorStates}
+              verdict={verdict}
+              lang={lang}
+              onReset={handleReset}
+            />
+          )}
+        </main>
 
-      <Footer lang={lang} />
+        <Footer lang={lang} />
 
-      <KeySettingsModal
-        isOpen={isKeyModalOpen}
-        lang={lang}
-        onClose={() => setIsKeyModalOpen(false)}
-      />
-    </div>
+        <KeySettingsModal
+          isOpen={isKeyModalOpen}
+          lang={lang}
+          onClose={() => setIsKeyModalOpen(false)}
+        />
+      </div>
+    </>
   );
 }
