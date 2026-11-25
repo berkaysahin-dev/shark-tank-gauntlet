@@ -24,7 +24,7 @@ const geistMono = Geist_Mono({
   display: "swap",
 });
 
-const SITE_URL = "https://pitch.berkaysahin.net";
+const SITE_URL = "https://gauntlet.berkaysahin.net";
 
 export const viewport: Viewport = {
   themeColor: "#ffffff",
@@ -41,15 +41,14 @@ export const metadata: Metadata = {
     template: "%s | The Gauntlet — Berkay Şahin",
   },
   description:
-    "Girişiminizi satın almamak için her açığı zorlayan 5 acımasız psikolojik alıcı arketipine karşı test edin. Sıfır veri saklama, BYOK ve çevrimdışı simülatör.",
+    "Test your startup pitch against 5 ruthless buyer archetypes. Zero retention, BYOK and built-in offline simulator.",
   keywords: [
     "The Gauntlet",
     "Startup Pitch Simulator",
     "Berkay Şahin",
     "berkaysahin.net",
-    "pitch.berkaysahin.net",
+    "gauntlet.berkaysahin.net",
     "AI Boardroom Simulator",
-    "Girişim Doğrulama",
   ],
   authors: [{ name: "Berkay Şahin", url: "https://berkaysahin.net" }],
   creator: "Berkay Şahin",
@@ -57,20 +56,20 @@ export const metadata: Metadata = {
   alternates: {
     canonical: SITE_URL,
     languages: {
-      tr: SITE_URL,
       en: SITE_URL,
+      tr: SITE_URL,
       "x-default": SITE_URL,
     },
   },
   openGraph: {
     type: "website",
-    locale: "tr_TR",
-    alternateLocale: ["en_US"],
+    locale: "en_US",
+    alternateLocale: ["tr_TR"],
     url: SITE_URL,
-    title: "The Gauntlet — Girişim Pitch Arenası | Berkay Şahin",
+    title: "The Gauntlet — Adversarial Founder Arena | Berkay Şahin",
     description:
-      "Girişiminizi 5 acımasız psikolojik alıcı arketipine karşı test edin. Sıfır veri saklama, BYOK ve çevrimdışı simülatör.",
-    siteName: "pitch.berkaysahin.net",
+      "Test your startup pitch against 5 ruthless buyer archetypes. Zero retention, BYOK and offline simulator.",
+    siteName: "gauntlet.berkaysahin.net",
   },
   twitter: {
     card: "summary_large_image",
@@ -95,7 +94,7 @@ export default function RootLayout({
 }>) {
   return (
     <html
-      lang="tr"
+      lang="en"
       data-theme="light"
       className={`${plusJakartaSans.variable} ${titleFont.variable} ${geistMono.variable} light h-full antialiased`}
       suppressHydrationWarning

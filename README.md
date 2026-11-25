@@ -2,7 +2,7 @@
 
 Adversarial founder boardroom simulation. Test your startup pitch against five ruthless psychological buyer archetypes who actively try to reject you.
 
-[**Live App — pitch.berkaysahin.net**](https://pitch.berkaysahin.net) • [**berkaysahin.net**](https://berkaysahin.net)
+[**Live App — gauntlet.berkaysahin.net**](https://gauntlet.berkaysahin.net) • [**berkaysahin.net**](https://berkaysahin.net)
 
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fberkaysahin-dev%2Fshark-tank-gauntlet)
 [![License: MIT](https://img.shields.io/badge/License-MIT-black.svg)](LICENSE)

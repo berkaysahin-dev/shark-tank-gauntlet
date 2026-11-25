@@ -124,11 +124,6 @@ export const PitchSetup: React.FC<PitchSetupProps> = ({ lang, onStartGauntlet })
     <div className="max-w-4xl mx-auto px-4 sm:px-6 md:px-8 pt-24 sm:pt-32 pb-12 sm:pb-16 space-y-10 sm:space-y-12">
       {/* Apple Editorial Hero */}
       <div className="text-center space-y-4">
-        <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-border bg-surface text-[11px] font-medium text-muted select-none">
-          <span className="w-1.5 h-1.5 rounded-full bg-accent" />
-          <span>pitch.berkaysahin.net</span>
-        </span>
-
         <h1 className="text-3xl sm:text-5xl md:text-6xl font-semibold tracking-[-0.035em] apple-shimmer-text leading-[1.15] block mx-auto">
           {isTr ? "The Gauntlet" : "The Gauntlet"}
         </h1>

@@ -85,7 +85,7 @@ export const Header: React.FC<HeaderProps> = ({
               onClick={onReset}
               className="text-[12px] font-medium text-muted hover:text-foreground transition-colors cursor-pointer whitespace-nowrap"
             >
-              pitch
+              gauntlet
             </button>
           </div>
 

@@ -22,10 +22,10 @@ type GauntletStage = "SETUP" | "ARENA" | "VERDICT";
 export default function HomePage() {
   const [lang, setLang] = useState<Language>(() => {
     if (typeof window !== "undefined") {
-      const saved = (localStorage.getItem("locale") || localStorage.getItem("gauntlet_lang")) as Language;
+      const saved = (localStorage.getItem("gauntlet_lang") || localStorage.getItem("locale")) as Language;
       if (saved === "en" || saved === "tr") return saved;
     }
-    return "tr";
+    return "en";
   });
   const [stage, setStage] = useState<GauntletStage>("SETUP");
   const [pitch, setPitch] = useState<PitchData | null>(null);

@@ -1,6 +1,6 @@
 import { ImageResponse } from "next/og";
 
-export const alt = "The Gauntlet — pitch.berkaysahin.net";
+export const alt = "The Gauntlet — gauntlet.berkaysahin.net";
 
 export const size = {
   width: 1200,
@@ -42,7 +42,7 @@ export default async function Image() {
               color: "#a1a1aa",
             }}
           >
-            pitch.berkaysahin.net
+            gauntlet.berkaysahin.net
           </span>
         </div>
 
@@ -67,7 +67,7 @@ export default async function Image() {
               lineHeight: 1.4,
             }}
           >
-            5 Acımasız Alıcı Arketipine Karşı Girişim Pitch Simülatörü
+            Adversarial Founder Arena · Test Your Startup Pitch Against 5 Judges
           </p>
         </div>
 

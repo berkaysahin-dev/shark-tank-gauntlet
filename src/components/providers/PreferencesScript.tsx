@@ -13,13 +13,13 @@ export const initPreferencesScript = `
       document.documentElement.classList.add('light');
       document.documentElement.classList.remove('dark');
     }
-    var storedLocale = localStorage.getItem('locale') || localStorage.getItem('gauntlet_lang');
-    var locale = (storedLocale === 'tr' || storedLocale === 'en') ? storedLocale : 'tr';
+    var storedLocale = localStorage.getItem('gauntlet_lang') || localStorage.getItem('locale');
+    var locale = (storedLocale === 'tr' || storedLocale === 'en') ? storedLocale : 'en';
     document.documentElement.lang = locale;
   } catch (e) {
     document.documentElement.setAttribute('data-theme', 'light');
     document.documentElement.classList.add('light');
-    document.documentElement.lang = 'tr';
+    document.documentElement.lang = 'en';
   }
 })();
 `;

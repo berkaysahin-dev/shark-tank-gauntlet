@@ -6,7 +6,7 @@ export default function robots(): MetadataRoute.Robots {
       userAgent: "*",
       allow: "/",
     },
-    sitemap: "https://pitch.berkaysahin.net/sitemap.xml",
-    host: "https://pitch.berkaysahin.net",
+    sitemap: "https://gauntlet.berkaysahin.net/sitemap.xml",
+    host: "https://gauntlet.berkaysahin.net",
   };
 }

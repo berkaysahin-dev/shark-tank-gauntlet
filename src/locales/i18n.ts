@@ -170,7 +170,7 @@ export const translations: Record<Language, Translations> = {
       copied: "Copied to Clipboard!",
       resetButton: "Pitch a New Startup",
       shareTemplate: (name, convinced, total, avg, verdict, vuln) =>
-        `I just took my startup (${name}) through The Gauntlet.\nResult: ${convinced}/${total} judges bought in (Average Conviction: ${avg}%)\nVerdict: ${verdict}\nKey Weakness: ${vuln}\n\nTest your pitch against 5 ruthless archetypes for free:\nhttps://pitch.berkaysahin.net`,
+        `I just took my startup (${name}) through The Gauntlet.\nResult: ${convinced}/${total} judges bought in (Average Conviction: ${avg}%)\nVerdict: ${verdict}\nKey Weakness: ${vuln}\n\nTest your pitch against 5 ruthless archetypes for free:\nhttps://gauntlet.berkaysahin.net`,
     },
     byokModal: {
       title: "Private API Key Management (BYOK)",
@@ -272,7 +272,7 @@ export const translations: Record<Language, Translations> = {
       copied: "Panoya Kopyalandı!",
       resetButton: "Yeni Bir Girişim Test Et",
       shareTemplate: (name, convinced, total, avg, verdict, vuln) =>
-        `Girişimimi (${name}) The Gauntlet jürisine sundum.\nSonuç: ${convinced}/${total} jüri ikna oldu (Ortalama: %${avg})\nKarar: ${verdict}\nEn Zayıf Halka: ${vuln}\n\nSen de 5 acımasız jüriye karşı fikrini ücretsiz test et:\nhttps://pitch.berkaysahin.net`,
+        `Girişimimi (${name}) The Gauntlet jürisine sundum.\nSonuç: ${convinced}/${total} jüri ikna oldu (Ortalama: %${avg})\nKarar: ${verdict}\nEn Zayıf Halka: ${vuln}\n\nSen de 5 acımasız jüriye karşı fikrini ücretsiz test et:\nhttps://gauntlet.berkaysahin.net`,
     },
     byokModal: {
       title: "Kişisel API Anahtarı (BYOK)",
