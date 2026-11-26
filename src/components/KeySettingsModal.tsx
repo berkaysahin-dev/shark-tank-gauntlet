@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, ShieldCheck, ExternalLink, Trash2, Lock, CheckCircle2 } from "lucide-react";
+import { X, ShieldCheck, ExternalLink, Trash2, Lock } from "lucide-react";
 import { Language, translations } from "@/locales/i18n";
 import { playTurnTick } from "@/lib/audio";
 
@@ -18,7 +18,6 @@ export const KeySettingsModal: React.FC<KeySettingsModalProps> = ({
   onClose,
 }) => {
   const t = translations[lang].byokModal;
-  const isTr = lang === "tr";
   const [geminiKey, setGeminiKey] = useState(() =>
     typeof window !== "undefined" ? sessionStorage.getItem("gauntlet_gemini_key") || "" : ""
   );
@@ -92,16 +91,6 @@ export const KeySettingsModal: React.FC<KeySettingsModalProps> = ({
             <p className="text-xs text-muted leading-relaxed mb-5">
               {t.description}
             </p>
-
-            <div className="mb-5 p-3.5 rounded-2xl bg-background border border-border flex items-center justify-between text-xs">
-              <span className="text-muted">
-                {isTr ? "Varsayılan Motor:" : "Default Engine:"}
-              </span>
-              <span className="text-emerald-600 dark:text-emerald-400 font-medium flex items-center gap-1.5">
-                <CheckCircle2 size={13} />
-                <span>{isTr ? "Sıfır Kurulum Çevrimdışı Simülatör Aktif" : "Offline Heuristics Ready"}</span>
-              </span>
-            </div>
 
             <div className="space-y-4 mb-5">
               <div>

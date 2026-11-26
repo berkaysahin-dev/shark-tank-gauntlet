@@ -33,53 +33,53 @@ const QUICK_PRESETS: QuickPreset[] = [
     id: "roastsheet",
     icon: <Table2 size={18} className="text-accent" />,
     name: "RoastSheet",
-    taglineEn: "AI Excel Auditor",
-    taglineTr: "Finansal Hata Denetçisi",
-    oneLinerEn: "An Excel & Google Sheets add-in that catches formula breaks, hidden liabilities, and accounting errors in real time.",
-    oneLinerTr: "Muhasebe ve formül hatalarını anında yakalayan, finansal açıkları denetleyen yapay zeka eklentisi.",
-    targetEn: "SaaS founders and corporate finance teams",
-    targetTr: "KOBİ finansçıları ve startup kurucuları",
-    priceEn: "$29 / seat / month",
+    taglineEn: "Spreadsheet Auditor",
+    taglineTr: "Tablo Hata Bulucu",
+    oneLinerEn: "An Excel and Google Sheets add-on that spots broken formulas and accounting errors right away.",
+    oneLinerTr: "Excel ve Google E-Tablolar'daki formül ve hesap hatalarını anında yakalayan eklenti.",
+    targetEn: "Startup founders and finance teams",
+    targetTr: "KOBİ finansçıları ve girişimciler",
+    priceEn: "$29 / user / month",
     priceTr: "Kullanıcı başı aylık 29$",
   },
   {
     id: "safepulse",
     icon: <ShieldAlert size={18} className="text-accent" />,
     name: "SafePulse",
-    taglineEn: "Vendor Security Auditor",
-    taglineTr: "Tedarikçi Güvenlik Denetimi",
-    oneLinerEn: "Automated third-party security verification and compliance evidence collection for modern procurement teams.",
-    oneLinerTr: "Şirketlerin tedarikçi ve üçüncü parti yazılımlarını 10 saniyede güvenlik ve KVKK uyumluluğuna göre tarayan sistem.",
-    targetEn: "CISOs, security officers, and enterprise buyers",
+    taglineEn: "Vendor Security Check",
+    taglineTr: "Tedarikçi Güvenlik Kontrolü",
+    oneLinerEn: "Checks outside software tools for security and compliance risks in seconds before your team buys them.",
+    oneLinerTr: "Şirketin alacağı yeni yazılımları 10 saniyede güvenlik ve KVKK açısından tarayan sistem.",
+    targetEn: "Security leads and IT buyers",
     targetTr: "Bilgi güvenliği yöneticileri ve satın alma ekipleri",
-    priceEn: "$199 / month enterprise license",
-    priceTr: "Aylık 2.500 TL kurumsal lisans",
+    priceEn: "$199 / month team plan",
+    priceTr: "Aylık 2.500 TL ekip planı",
   },
   {
     id: "notab",
     icon: <Zap size={18} className="text-accent" />,
     name: "NoTab Flow",
-    taglineEn: "Headless Approvals",
-    taglineTr: "Sekmesiz Onay Sistemi",
-    oneLinerEn: "Headless client approvals and contract sign-offs executed directly inside WhatsApp and Slack with zero logins.",
-    oneLinerTr: "Yeni bir web paneli açmadan, tüm fatura ve sözleşme onaylarını doğrudan WhatsApp ve Slack içinden bitiren araç.",
-    targetEn: "Overwhelmed agency and operations directors",
+    taglineEn: "No-App Approvals",
+    taglineTr: "Sekmesiz Onay Aracı",
+    oneLinerEn: "Lets clients and managers approve invoices and contracts straight inside WhatsApp or Slack.",
+    oneLinerTr: "Yeni bir site açmadan fatura ve sözleşme onaylarını doğrudan WhatsApp veya Slack'ten bitiren araç.",
+    targetEn: "Busy agency and operations managers",
     targetTr: "Yoğun operasyon ve ajans yöneticileri",
-    priceEn: "$99 / month flat team rate",
+    priceEn: "$99 / month flat rate",
     priceTr: "Ekip başı aylık 99$",
   },
   {
     id: "devrelay",
     icon: <Terminal size={18} className="text-accent" />,
     name: "DevRelay",
-    taglineEn: "Automated Deploy Guard",
-    taglineTr: "Otomatik Dağıtım Koruması",
-    oneLinerEn: "Zero-latency CI/CD pipeline automation that rolls back broken microservice deploys before users notice latency spikes.",
-    oneLinerTr: "Mikroservis dağıtımlarında performans düşüşünü anında algılayıp sistemi hatasız sürüme döndüren otonom araç.",
-    targetEn: "DevOps leads and engineering managers",
-    targetTr: "Yazılım liderleri ve mühendislik yöneticileri",
-    priceEn: "$79 / month cluster license",
-    priceTr: "Aylık 79$ küme lisansı",
+    taglineEn: "Auto Update Rollback",
+    taglineTr: "Otomatik Geri Alma",
+    oneLinerEn: "Automatically rolls back broken software updates before users notice slowdowns or crashes.",
+    oneLinerTr: "Canlıya çıkan hatalı güncellemeyi kullanıcılar fark etmeden saniyeler içinde eski haline döndüren araç.",
+    targetEn: "Engineering leads and DevOps teams",
+    targetTr: "Yazılım liderleri ve sistem ekipleri",
+    priceEn: "$79 / month team plan",
+    priceTr: "Aylık 79$ ekip planı",
   },
 ];
 
@@ -105,7 +105,7 @@ export const PitchSetup: React.FC<PitchSetupProps> = ({ lang, onStartGauntlet })
     onStartGauntlet({
       productName: productName.trim(),
       oneLiner: oneLiner.trim(),
-      targetAudience: targetAudience.trim() || (isTr ? "KOBİ ve kurumsal ekipler" : "Mid-market businesses"),
+      targetAudience: targetAudience.trim() || (isTr ? "KOBİ ve kurumsal ekipler" : "Small and mid-sized teams"),
       pricingModel: pricingModel.trim() || (isTr ? "Kullanıcı başı aylık 49$" : "$49 / user / month"),
     });
   };
@@ -125,19 +125,17 @@ export const PitchSetup: React.FC<PitchSetupProps> = ({ lang, onStartGauntlet })
       {/* Apple Editorial Hero */}
       <div className="text-center space-y-4">
         <h1 className="text-3xl sm:text-5xl md:text-6xl font-semibold tracking-[-0.035em] apple-shimmer-text leading-[1.15] block mx-auto">
-          {isTr ? "The Gauntlet" : "The Gauntlet"}
+          The Gauntlet
         </h1>
 
         <p className="text-base sm:text-xl font-medium tracking-tight text-foreground max-w-2xl mx-auto">
           {isTr
-            ? "Girişiminiz karar masası karşısında ayakta kalabilecek mi?"
-            : "Can your startup survive five ruthless buyer archetypes?"}
+            ? "Fikriniz 5 zorlu alıcının karşısında ayakta kalabilecek mi?"
+            : "Can your startup pitch survive five tough buyers?"}
         </p>
 
         <p className="text-xs sm:text-sm text-muted max-w-xl mx-auto leading-relaxed font-normal">
-          {isTr
-            ? "Kibar ve yüzeysel övgüleri unutun. Ürününüzü satın almamak için her açığı zorlayan 5 farklı psikolojik alıcı arketipinin karşısına çıkın."
-            : "Forget polite praise. Test your value proposition against 5 hyper-critical buyer archetypes who actively probe for fatal flaws before buying."}
+          {t.heroSubtitle}
         </p>
       </div>
 
@@ -154,7 +152,7 @@ export const PitchSetup: React.FC<PitchSetupProps> = ({ lang, onStartGauntlet })
             {isTr ? "Masadaki Karar Kurulu" : "The Boardroom Panel"}
           </span>
           <span className="text-[11px] font-medium text-accent">
-            {isTr ? "5 Farklı İtiraz Açısı" : "5 Distinct Angles"}
+            {isTr ? "5 Jüri Üyesi" : "5 Tough Buyers"}
           </span>
         </div>
         <div className="grid grid-cols-2 sm:grid-cols-5 gap-2.5 sm:gap-3">
@@ -179,10 +177,10 @@ export const PitchSetup: React.FC<PitchSetupProps> = ({ lang, onStartGauntlet })
       <div className="space-y-3">
         <div className="flex items-center justify-between text-xs">
           <span className="font-medium text-foreground">
-            {isTr ? "Hızlı Örnek Seç (Tek Tıkla Doldur)" : "Quick-Play Presets (1-Click)"}
+            {isTr ? "Hazır Örnek Seç (Tek Tıkla Doldur)" : "Pick an Example (1-Click)"}
           </span>
           <span className="text-muted text-[11px]">
-            {isTr ? "veya aşağıya kendiniz yazın" : "or write your own below"}
+            {isTr ? "veya aşağıya kendi fikrini yaz" : "or write your own below"}
           </span>
         </div>
 
@@ -201,9 +199,7 @@ export const PitchSetup: React.FC<PitchSetupProps> = ({ lang, onStartGauntlet })
                 }`}
               >
                 <div className="flex items-center justify-between mb-2.5">
-                  <div className="p-2 rounded-xl bg-background border border-border">
-                    {preset.icon}
-                  </div>
+                  <div className="shrink-0">{preset.icon}</div>
                   {isSelected && (
                     <span className="text-[10px] font-semibold text-accent bg-accent/10 px-2 py-0.5 rounded-full">
                       {isTr ? "Seçildi" : "Selected"}
@@ -225,7 +221,7 @@ export const PitchSetup: React.FC<PitchSetupProps> = ({ lang, onStartGauntlet })
         </div>
       </div>
 
-      {/* Main Pitch Docket Card (Exact Apple Contact Card Style) */}
+      {/* Main Pitch Card */}
       <div className="relative rounded-[28px] sm:rounded-[32px] p-6 sm:p-9 overflow-hidden bg-card-bg/90 border border-border shadow-xs dark:shadow-[0_20px_50px_rgba(0,0,0,0.5)] backdrop-blur-xl">
         <div
           aria-hidden="true"
@@ -236,14 +232,14 @@ export const PitchSetup: React.FC<PitchSetupProps> = ({ lang, onStartGauntlet })
           <div className="flex items-center justify-between pb-4 border-b border-border">
             <div>
               <h2 className="text-base sm:text-lg font-semibold tracking-tight text-foreground">
-                {isTr ? "Girişim Dosyası" : "Startup Pitch Docket"}
+                {isTr ? "Girişiminizi Tanıtın" : "Your Pitch"}
               </h2>
               <p className="text-xs text-muted mt-0.5">
-                {isTr ? "Kurulun önüne koyacağınız resmi bilgiler" : "The official dossier presented to the board"}
+                {isTr ? "Jüriye ne yaptığınızı kısaca anlatın" : "Tell the panel what you are building"}
               </p>
             </div>
             <span className="text-[11px] font-mono font-medium text-muted bg-background px-2.5 py-1 rounded-full border border-border">
-              {isTr ? "Adım 01/03" : "Stage 01/03"}
+              {isTr ? "Adım 1 / 3" : "Step 1 / 3"}
             </span>
           </div>
 
@@ -293,8 +289,8 @@ export const PitchSetup: React.FC<PitchSetupProps> = ({ lang, onStartGauntlet })
             />
             <p className="text-[11px] text-muted mt-1.5">
               {isTr
-                ? "İpucu: Kurulun dikkat süresi kısadır. Ne yaptığınızı ve kimi kurtardığınızı net söyleyin."
-                : "Tip: Keep it punchy. What specific pain do you kill and for whom?"}
+                ? "İpucu: Kimin hangi derdini çözdüğünüzü sade bir dille yazın."
+                : "Tip: Keep it simple. What problem do you solve, and for who?"}
             </p>
           </div>
 
@@ -337,14 +333,14 @@ export const PitchSetup: React.FC<PitchSetupProps> = ({ lang, onStartGauntlet })
           <div className="pt-4 border-t border-border flex flex-col sm:flex-row items-center justify-between gap-4">
             <div className="text-xs text-muted text-center sm:text-left flex items-center gap-1.5">
               <CheckCircle2 size={15} className="text-emerald-600 dark:text-emerald-400 shrink-0" />
-              <span>{isTr ? "Sıfır veri kaydı, tam yerel gizlilik" : "Zero retention, complete local privacy"}</span>
+              <span>{isTr ? "Verileriniz saklanmaz" : "Your data is not stored"}</span>
             </div>
 
             <button
               type="submit"
               className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-7 py-3 rounded-full bg-[#0071e3] hover:bg-[#0077ed] text-white text-xs sm:text-sm font-medium shadow-[0_4px_16px_rgba(0,113,227,0.3)] hover:shadow-[0_6px_24px_rgba(0,113,227,0.4)] active:scale-95 transition-all cursor-pointer select-none"
             >
-              <span>{isTr ? "Masaya Çık ve Savun" : "Enter the Boardroom"}</span>
+              <span>{t.submitButton}</span>
               <ArrowRight size={16} />
             </button>
           </div>

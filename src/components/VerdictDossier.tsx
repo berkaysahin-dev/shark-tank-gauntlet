@@ -60,12 +60,10 @@ export const VerdictDossier: React.FC<VerdictDossierProps> = ({
         {/* Top Header Strip */}
         <div className="px-6 py-4 border-b border-border bg-surface flex flex-col sm:flex-row sm:items-center justify-between gap-2">
           <div className="flex items-center gap-3">
-            <div className="p-2 rounded-xl bg-background border border-border">
-              <FileCheck size={17} className="text-accent" />
-            </div>
+            <FileCheck size={18} className="text-accent shrink-0" />
             <div>
               <span className="text-[10px] font-mono font-medium text-accent block">
-                {isTr ? "Resmi Karar Kurulu Tutanağı" : "Official Boardroom Verdict Dossier"}
+                {t.title}
               </span>
               <h2 className="text-lg font-semibold tracking-tight text-foreground">
                 {pitch.productName}
@@ -120,17 +118,17 @@ export const VerdictDossier: React.FC<VerdictDossierProps> = ({
               {isSuccess ? (
                 <div className="rubber-stamp stamp-deal text-xs">
                   <Check size={13} strokeWidth={2.5} />
-                  <span>{isTr ? "KABUL: YATIRIM TEKLİFİ" : "DEAL ACCEPTED"}</span>
+                  <span>{isTr ? "KABUL: TEKLİF VAR" : "DEAL ACCEPTED"}</span>
                 </div>
               ) : isConditional ? (
                 <div className="rubber-stamp stamp-conditional text-xs">
                   <AlertTriangle size={13} strokeWidth={2.5} />
-                  <span>{isTr ? "ŞARTLI DEĞERLENDİRME" : "CONDITIONAL OFFER"}</span>
+                  <span>{isTr ? "ŞARTLI ONAY" : "CONDITIONAL OFFER"}</span>
                 </div>
               ) : (
                 <div className="rubber-stamp stamp-reject text-xs">
                   <X size={13} strokeWidth={2.5} />
-                  <span>{isTr ? "REDDEDİLDİ: TEKLİF YOK" : "REJECTED: NO DEAL"}</span>
+                  <span>{isTr ? "TEKLİF YOK" : "NO DEAL"}</span>
                 </div>
               )}
 

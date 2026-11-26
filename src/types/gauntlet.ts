@@ -20,6 +20,7 @@ export interface JurorConfig {
   coreObjectionTemplate: string;
   coreObjectionTemplateTr: string;
   psychology: string;
+  psychologyTr: string;
   fatalTrigger: string;
   persuasionKey: string;
   initialConviction: number;

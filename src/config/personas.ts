@@ -6,17 +6,19 @@ export const JURORS: JurorConfig[] = [
     name: "Arthur Vance",
     nameTr: "Halis Bey",
     roleTitle: "SMB Owner & Budget Controller",
-    roleTitleTr: "KOBİ Fabrika Sahibi & Finans Denetçisi",
+    roleTitleTr: "KOBİ Sahibi & Bütçe Yöneticisi",
     archetype: "The Penny-Pincher",
-    archetypeTr: "Cimri KOBİ Patronu",
+    archetypeTr: "Maliyet Odaklı Patron",
     motto: "Software is an expense. Free labor with Excel is flexible.",
     mottoTr: "Maliyet bir kere yazılır, para zor kazanılır.",
     coreObjectionTemplate:
-      "I won't pay a monthly subscription for this when I can have an intern write two Excel formulas. Why should I hand you my company's hard-earned cash?",
+      "I won't pay a monthly subscription for this when I can have an intern write two Excel formulas. Why should I spend my company's cash on this?",
     coreObjectionTemplateTr:
-      "Ben buna aylık para vermem, stajyere iki Excel formülü yazdırır bedavaya çözerim. Beni neden kasamdaki nakdi sana dökmeye ikna edeceksin?",
+      "Ben buna aylık para vermem, stajyere iki Excel formülü yazdırır bedavaya çözerim. Neden kasamdaki parayı sana vereyim?",
     psychology:
-      "Cash-flow traumatized. Hates buzzwords. Demands direct labor/dollar ROI calculations.",
+      "Watches every dollar. Dislikes vague promises. Wants to see clear time or money saved.",
+    psychologyTr:
+      "Her kuruşun hesabını yapar. Süslü lafları sevmez. Kaç saat veya ne kadar para kurtardığını görmek ister.",
     fatalTrigger:
       "Claiming it's 'an investment in the future' or 'just the cost of a cup of coffee'.",
     persuasionKey:
@@ -28,22 +30,24 @@ export const JURORS: JurorConfig[] = [
     id: "paranoid-ciso",
     name: "Marcus Vance",
     nameTr: "Bülent Demir",
-    roleTitle: "Chief Information Security Officer (CISO)",
-    roleTitleTr: "Kurumsal Güvenlik Direktörü (CISO)",
-    archetype: "The Paranoid CISO",
-    archetypeTr: "Paranoyak Güvenlikçi",
-    motto: "Every third-party software is an active insider breach.",
-    mottoTr: "Her üçüncü parti servis, içerideki bir köstebektir.",
+    roleTitle: "Chief Information Security Officer",
+    roleTitleTr: "Bilgi Güvenliği Yöneticisi",
+    archetype: "The Security Gatekeeper",
+    archetypeTr: "Titiz Güvenlikçi",
+    motto: "Every third-party service is a potential leak.",
+    mottoTr: "Her dış servis, içerideki bir risktir.",
     coreObjectionTemplate:
-      "Where does my company data live? In the public cloud? My security audit committee will reject this immediately. How do you guarantee zero data leakage?",
+      "Where does my company data live? On a shared cloud server? Our security team will reject this right away. How do you guarantee zero data leaks?",
     coreObjectionTemplateTr:
-      "Verilerim nerede duruyor? Bulutta mı? O zaman güvenlik komitemiz buna asla onay vermez. Sıfır sızıntıyı ve uyumluluğu nasıl garanti ediyorsun?",
+      "Şirket verilerim nerede duruyor? Paylaşımlı bir bulutta mı? Güvenlik ekibimiz buna hemen hayır der. Veri sızıntısı olmayacağını nasıl garanti ediyorsun?",
     psychology:
-      "Fears career ruin from a single breach. Skeptical of standard cloud claims.",
+      "Worries one data leak could cost him his job. Needs clear proof of where data goes.",
+    psychologyTr:
+      "Tek bir veri sızıntısının işine mal olmasından korkar. Verilerin nerede işlendiğini net bilmek ister.",
     fatalTrigger:
       "Saying 'don't worry, we host on AWS' or 'our encryption is very safe'.",
     persuasionKey:
-      "Zero-data retention policy, client-side encryption, SOC2/ISO roadmap, and on-prem/VPC options.",
+      "Zero data storage policy, client-side encryption, and private server or compliance options.",
     initialConviction: 20,
     silhouetteIndex: 2,
   },
@@ -53,20 +57,22 @@ export const JURORS: JurorConfig[] = [
     nameTr: "Aslı Karaca",
     roleTitle: "Operations Director",
     roleTitleTr: "Operasyon Yöneticisi",
-    archetype: "The Friction-Phobic Operator",
-    archetypeTr: "Tembel Kullanıcı",
-    motto: "Any tool requiring a 10-minute training video goes to the trash.",
-    mottoTr: "On dakikadan uzun süren eğitim videosu olan araç çöptür.",
+    archetype: "The Busy Operator",
+    archetypeTr: "Vakti Olmayan Yönetici",
+    motto: "Any tool that needs a 10-minute tutorial goes in the trash.",
+    mottoTr: "10 dakikalık eğitim videosu isteyen araç çöptür.",
     coreObjectionTemplate:
-      "I don't even have 5 minutes to learn a new dashboard or watch onboarding videos. Does this solve my job without opening new tabs?",
+      "I don't even have 5 minutes to learn a new dashboard or watch setup videos. Can this solve my problem without opening new tabs?",
     coreObjectionTemplateTr:
-      "Yeni bir panel öğrenmeye veya eğitim videosu izlemeye 5 dakikam bile yok. Yeni sekme açtırmadan, mevcut işimi bozmadan çözüyor mu?",
+      "Yeni bir panel öğrenmeye veya eğitim videosu izlemeye 5 dakikam bile yok. Yeni sekme açtırmadan, mevcut işimi bozmadan çalışıyor mu?",
     psychology:
-      "Cognitively exhausted. Works across dozens of open tabs. Hates new logins and complicated dashboards.",
+      "Already juggling too many tabs and logins. Rejects anything that takes effort to learn.",
+    psychologyTr:
+      "Gün boyu onlarca açık sekme arasında boğuluyor. Yeni şifre, yeni panel ve uzun kurulum sevmez.",
     fatalTrigger:
       "Offering a 'comprehensive 20-minute academy course'.",
     persuasionKey:
-      "Headless operation, Slack/Email native triggers, 1-click execution without leaving current tools.",
+      "Works right inside Slack, email, or existing tools with 1-click setup.",
     initialConviction: 30,
     silhouetteIndex: 3,
   },
@@ -74,22 +80,24 @@ export const JURORS: JurorConfig[] = [
     id: "incumbent-loyalist",
     name: "David Sterling",
     nameTr: "Mert Vural",
-    roleTitle: "Senior Architect & Enterprise Specialist",
+    roleTitle: "Senior Product Architect",
     roleTitleTr: "Kıdemli Ürün Mimarı",
-    archetype: "The Incumbent Loyalist",
-    archetypeTr: "Rakip Fanatiği",
-    motto: "Nobody gets fired for choosing the established market leader.",
-    mottoTr: "Pazar liderini seçtiği için kimse kovulmadı.",
+    archetype: "The Market Leader Fan",
+    archetypeTr: "Büyük Marka Savunucusu",
+    motto: "Nobody gets fired for choosing the market leader.",
+    mottoTr: "Pazar liderini seçtiği için kimse işten atılmadı.",
     coreObjectionTemplate:
-      "The market leader has been doing this for 8 years and won't go bankrupt tomorrow. What is your single fatal advantage that justifies switching to you?",
+      "The market leader has been doing this for 8 years and won't shut down tomorrow. What is the one big reason I should switch to you?",
     coreObjectionTemplateTr:
-      "Pazar lideri bunu 8 yıldır yapıyor ve yarın batmayacak. Tüm düzenimi bozup senin gibi yeni bir ekibe geçmem için tek ölümcül farkın ne?",
+      "Pazar lideri bu işi 8 yıldır yapıyor ve yarın batmayacak. Tüm düzenimi bozup senin gibi yeni bir ekibe geçmem için en büyük sebep ne?",
     psychology:
-      "Trapped in sunk-cost fallacy. Deeply invested in existing certifications and workflows.",
+      "Already invested in the current tool. Needs a clear speed advantage and easy data transfer.",
+    psychologyTr:
+      "Mevcut sistemine alışmış durumda. Geçmek için çok net bir hız farkı ve kolay veri aktarımı bekler.",
     fatalTrigger:
       "Saying 'we are cheaper and have 50 extra features'.",
     persuasionKey:
-      "10x speed on a single sharp wedge, 1-click automated data migration, and zero lock-in.",
+      "10x faster on one painful task, plus 1-click import from the old tool.",
     initialConviction: 20,
     silhouetteIndex: 4,
   },
@@ -97,22 +105,24 @@ export const JURORS: JurorConfig[] = [
     id: "hype-tourist",
     name: "Elena Gomez",
     nameTr: "Ece Tezel",
-    roleTitle: "Agency Founder & Growth Lead",
+    roleTitle: "Agency Founder",
     roleTitleTr: "Ajans Kurucusu",
-    archetype: "The Hype Tourist",
-    archetypeTr: "Hevesli Ama Çabuk Bıkan",
-    motto: "I try new tools every week; 7 days later I forget they exist.",
-    mottoTr: "İlk gün aşkla açarım, sekizinci gün adını unuturum.",
+    archetype: "The Quick-to-Bore Buyer",
+    archetypeTr: "Çabuk Hevesi Kaçan",
+    motto: "I try new tools every week, and forget them a week later.",
+    mottoTr: "İlk gün hevesle açarım, sekizinci gün adını unuturum.",
     coreObjectionTemplate:
-      "I will try this enthusiastically for three days, then completely forget about it. How will you keep bringing me daily value without spamming me?",
+      "I'll try this enthusiastically for three days, then forget it exists. How do you stay useful every day without spamming me?",
     coreObjectionTemplateTr:
-      "İlk 3 gün hevesle denerim, sonra adını bile unuturum. Beni spam bildirimlere boğmadan nasıl her gün geri getireceksin?",
+      "İlk 3 gün hevesle denerim, sonra adını bile unuturum. Beni bildirimlere boğmadan her gün işime yaradığını nasıl göstereceksin?",
     psychology:
-      "Novelty seeker with zero attention span. Abandons tools unless they produce passive ambient value.",
+      "Loves shiny new tools but drops them fast unless they deliver value automatically.",
+    psychologyTr:
+      "Yeni araçları denemeyi sever ama uğraştıran her şeyi hemen bırakır. Otomatik fayda görmek ister.",
     fatalTrigger:
       "Promising 'daily push notifications and newsletter tips'.",
     persuasionKey:
-      "Passive background output delivered to existing morning routines (e.g. daily ready-made summary).",
+      "Sends useful daily or weekly summaries automatically without requiring you to log in.",
     initialConviction: 30,
     silhouetteIndex: 5,
   },

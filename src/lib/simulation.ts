@@ -109,19 +109,19 @@ export function simulateEvaluation(
       if (hasSecTerms) {
         scoreDelta = 40;
         reaction = isTr
-          ? "Beklediğimden daha teknik konuştun. Sıfır veri saklama taahhüdü ve istemci taraflı şifreleme audit raporumu kurtarır. Bunu sözleşmeye yazarsan onay veririm."
-          : "Now we're talking engineering rigor. A zero-retention policy and client-side encryption satisfy my security committee. Put that in the SLA and we're good.";
+          ? "Net ve teknik bir yanıt verdin. Veri saklamamanız ve istemci taraflı şifreleme güvenlik ekibimizi rahatlatır. Bunu sözleşmeye yazarsan onay veririm."
+          : "That is a clear, solid answer. Not storing client data and encrypting on our side satisfies our security team. Put that in writing and I'm in.";
       } else if (isWeakSec) {
         scoreDelta = -25;
         reaction = isTr
-          ? "'AWS çok güvenli' mi dedin sen bana? AWS'in güvenliği senin kodundaki açığı kapatmaz! Kurumsal veriyi oyuncak edemem. Reddedildi."
-          : "Saying 'AWS is secure' proves you don't understand infrastructure security. AWS security doesn't protect against your application flaws. Vetoed.";
+          ? "'AWS çok güvenli' demek yetmez. Bulut sağlayıcının güvenliği uygulamadaki açığı kapatmaz. Kurumsal veriyi riske atamam."
+          : "Saying 'AWS is secure' doesn't cover bugs in your own app. I can't risk company data on vague promises.";
         isFatal = true;
       } else {
         scoreDelta = 5;
         reaction = isTr
-          ? "Genel geçer laflar bunlar. Bir CISO'yu ikna etmek için ISO 27001 yol haritanı veya lokal veri işleme protokolünü görmek isterim."
-          : "Too vague. Before I approve any vendor, I need to see your exact data retention lifecycle and encryption certificates.";
+          ? "Çok genel kaldın. Beni ikna etmek için verilerin nerede durduğunu ve ne zaman silindiğini net söylemelisin."
+          : "Too vague. Before I approve a new tool, I need to know exactly where data lives and when it gets deleted.";
       }
       break;
     }
@@ -224,37 +224,37 @@ export function simulateVerdict(
 
   let termSheetStatus: "ACCEPTED" | "CONDITIONAL" | "REJECTED" = "REJECTED";
   let valuationVerdict = isTr
-    ? "Teklif Yok — Masadan Elendiniz"
-    : "No Deal — Dismissed from the Boardroom";
+    ? "Teklif Yok — Jüri İkna Olmadı"
+    : "No Deal — Panel Not Convinced";
   let lethalVulnerability = isTr
-    ? "Argümanlarınız somut iş çıktısı ve risk yönetiminden ziyade soyut özellikler üzerinde kaldı."
-    : "Your responses relied on abstract feature promises rather than hard financial ROI and strict risk protocols.";
+    ? "Yanıtlarınız somut zaman/maliyet kazancı ve veri güvenliği yerine genel özelliklerde kaldı."
+    : "Your answers stayed on general features instead of clear time saved, cost savings, and data safety.";
   let strategicRemedy = isTr
-    ? "Fiyatlandırmayı net ROI'ye bağlayın, sıfır veri tutma protokolü tanımlayın ve mevcut araçlara entegre olun."
-    : "Anchor pricing directly to employee hours saved, commit to a strict zero-retention data SLA, and embed directly into existing communication channels.";
+    ? "Fiyatınızı kurtarılan saate bağlayın, verilerin saklanmadığını netleştirin ve mevcut araçlara entegre olun."
+    : "Tie your pricing to hours saved, make data privacy crystal clear, and fit inside tools teams already use.";
 
   if (convinced >= 4) {
     termSheetStatus = "ACCEPTED";
     valuationVerdict = isTr
-      ? "Tebrikler: 5 Jüriden 4'ü İkna Edildi — Anlaşma Masada!"
-      : "Acquired: 4 of 5 Judges Bought In — Term Sheet Issued!";
+      ? "Tebrikler: 5 Jüriden 4'ü İkna Oldu — Teklif Masada!"
+      : "Deal: 4 of 5 Judges Convinced!";
     lethalVulnerability = isTr
-      ? "Küçük operasyonel detaylarda birkaç soru işareti masada kaldı."
-      : "Minor operational integration nuances remained slightly unanswered.";
+      ? "Küçük kurulum ve geçiş detaylarında birkaç soru işareti kaldı."
+      : "A few small questions remained around setup and switching from old tools.";
     strategicRemedy = isTr
-      ? "Pazar liderinin en hantal kaldığı spesifik noktayı hedefleyerek lansman yapın."
-      : "Double down on your 10x wedge against the bloated market leader.";
+      ? "Büyük rakiplerin en yavaş kaldığı tek noktaya odaklanarak büyümeye devam edin."
+      : "Stay focused on the one job you do much faster than big incumbents.";
   } else if (convinced >= 2) {
     termSheetStatus = "CONDITIONAL";
     valuationVerdict = isTr
-      ? "Şartlı İlerleme — 5 Jüriden 2'si Masada Kaldı"
-      : "Conditional Interest — 2 of 5 Judges Still at the Table";
+      ? "Şartlı Onay — 5 Jüriden 2'si Masada Kaldı"
+      : "Maybe — 2 of 5 Judges Still Interested";
     lethalVulnerability = isTr
-      ? "Maliyet veya kurumsal veri güvenliği tarafındaki şüpheler tam temizlenemedi."
-      : "Cost justification or cloud compliance doubts weren't fully cleared up.";
+      ? "Maliyet hesabı veya veri güvenliği tarafındaki şüpheler tam giderilemedi."
+      : "Cost justification or data privacy doubts weren't fully cleared up.";
     strategicRemedy = isTr
-      ? "Kullanıcıya yeni ekran açtırmayın ve ilk 14 günde maliyetini çıkardığını gösteren sayaç ekleyin."
-      : "Eliminate dashboard friction and provide a transparent real-time ROI dashboard.";
+      ? "Yeni bir panel açtırmadan çalışın ve ürünün ilk 2 haftada maliyetini çıkardığını net gösterin."
+      : "Remove extra setup steps and show clearly how the tool pays for itself in the first 14 days.";
   }
 
   return {

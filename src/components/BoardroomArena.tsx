@@ -82,52 +82,52 @@ export const BoardroomArena: React.FC<BoardroomArenaProps> = ({
       case "cfo-penny-pincher":
         return isTr
           ? [
-              { label: "30 Günlük ROI", text: "Bu sistem haftada 8 saat personel iş gücünü kurtararak doğrudan saatlik maliyet üzerinden 30 günde kendini amorti eder." },
-              { label: "Hatasız Otomasyon", text: "Kırılgan tablo formülleri ve insan hatası yerine tüm hesaplamaları sıfır riskle otomatikleştirir." },
+              { label: "30 Günde Kendini Öder", text: "Bu sistem haftada 8 saat personel zamanı kurtararak saatlik maliyet üzerinden 30 günde kendini öder." },
+              { label: "Excel Hatasını Bitirir", text: "Kırılgan tablo formülleri ve insan hatası yerine tüm hesaplamaları otomatik yapar." },
             ]
           : [
-              { label: "30-Day Payback", text: "This saves 8 hours of payroll every week per seat, paying for itself within 20 business days on direct labor recovery." },
-              { label: "Formula Audit", text: "Unlike brittle spreadsheet formulas, this eliminates human reconciliation errors and audits all books automatically." },
+              { label: "30-Day Payback", text: "This saves 8 hours of staff time every week per user, paying for itself within 30 days." },
+              { label: "No Formula Errors", text: "Replaces fragile spreadsheets and catches costly manual mistakes automatically." },
             ];
       case "paranoid-ciso":
         return isTr
           ? [
-              { label: "Sıfır Veri Tutma", text: "Sistemimiz 'Zero-Data Retention' politikasıyla çalışır; istemci tarafında şifrelenir ve sunucularımızda hiçbir veri saklanmaz." },
-              { label: "VPC ve KVKK Uyumu", text: "Tüm altyapımız SOC2 Type II ve KVKK/GDPR uyumlu VPC izolasyonunda çalışır, tek bir bayt veri üçüncü partilerle paylaşılmaz." },
+              { label: "Veri Saklamıyoruz", text: "Veriler tarayıcı tarafında şifrelenir ve sunucularımızda hiçbir müşteri verisi saklanmaz." },
+              { label: "Özel Sunucu & KVKK", text: "Şirketinizin kendi sunucusunda (VPC) çalışabilir, KVKK ve GDPR kurallarına tam uyumludur." },
             ]
           : [
-              { label: "Zero-Data Retention", text: "We enforce zero client data retention and client-side encryption. No proprietary information ever touches multi-tenant storage." },
-              { label: "VPC Isolation", text: "Full enterprise VPC isolation, strict SOC2 Type II compliance roadmap, and complete local audit logging." },
+              { label: "No Data Stored", text: "Data is encrypted on your side and zero client information is stored on our servers." },
+              { label: "Private Cloud & Audit", text: "Runs in your own private cloud (VPC) with full audit logs and strict compliance." },
             ];
       case "friction-phobic":
         return isTr
           ? [
-              { label: "Sıfır Yeni Sekme", text: "Ekibiniz yeni bir panel açmaz. Tüm işlemler doğrudan mevcut Slack ve e-posta akışınızın içinde tek tıkla tamamlanır." },
-              { label: "Eğitim Videosuz Kurulum", text: "10 saniyede çalışmaya başlar, hiçbir eğitim videosu veya karmaşık onboarding gerektirmez." },
+              { label: "Yeni Sekme Yok", text: "Ekibiniz yeni bir panel açmaz. Tüm işlemler doğrudan mevcut Slack ve e-posta içinden tek tıkla biter." },
+              { label: "Kurulum 10 Saniye", text: "10 saniyede çalışmaya başlar, eğitim videosu veya uzun kurulum gerektirmez." },
             ]
           : [
-              { label: "Headless Native", text: "Zero new tabs required. Everything executes silently inside your existing Slack, email, and daily workflows." },
-              { label: "Zero Onboarding", text: "Runs autonomously in under 30 seconds with zero onboarding webinars or complex dashboards." },
+              { label: "No New Tabs", text: "Zero new tabs needed. Everything runs straight inside Slack and email with one click." },
+              { label: "10-Second Setup", text: "Works in seconds with zero training videos or complicated setup." },
             ];
       case "incumbent-loyalist":
         return isTr
           ? [
-              { label: "10 Kat Hızlı Odak", text: "Pazar liderinin 50 gereksiz özelliği var; biz tek bir kritik problemi onların 10 katı hızında ve 1 dakikada çözüyoruz." },
-              { label: "1 Tıkla Veri Göçü", text: "Eski sistemdeki tüm geçmiş verilerinizi 1 tıkla aktarıyoruz, sıfır kilitlenme (lock-in) ve kesintisiz geçiş garantisi." },
+              { label: "10 Kat Hızlı", text: "Büyük rakiplerin kimsenin kullanmadığı 50 menüsü var; biz bu tek işi onlardan 10 kat hızlı çözüyoruz." },
+              { label: "1 Tıkla Veri Aktarımı", text: "Eski sistemdeki tüm verilerinizi 1 tıkla içeri alıyoruz, geçişte hiçbir kayıp yaşanmıyor." },
             ]
           : [
-              { label: "10x Sharp Wedge", text: "The legacy leader is bloated with 100 unused menus. We execute this exact core workflow 10x faster with zero latency." },
-              { label: "1-Click Migration", text: "Automated 1-click import from legacy market tools with zero vendor lock-in and seamless fallback." },
+              { label: "10x Faster", text: "The big incumbent has 100 bloated menus. We do this one critical job 10x faster." },
+              { label: "1-Click Import", text: "Bring all your data from the old tool in one click with zero lock-in." },
             ];
       case "hype-tourist":
         return isTr
           ? [
-              { label: "Pasif Sabah Özeti", text: "Her sabah panele girmenize gerek kalmadan, işinize yarayan kritik özeti e-postanıza hazır getirir." },
-              { label: "Sıfır Bildirim Kirliliği", text: "Gereksiz bildirim yağmuru yok; sadece doğrudan aksiyon gerektiren anlarda sessizce devreye girer." },
+              { label: "Otomatik Sabah Özeti", text: "Her sabah panele girmenize gerek kalmadan işinize yarayan kısa özeti e-postanıza hazır gönderir." },
+              { label: "Bildirim Kirliliği Yok", text: "Gereksiz bildirim yağmuru yok; sadece gerçekten aksiyon almanız gereken anda haber verir." },
             ]
           : [
-              { label: "Ambient Delivery", text: "Delivers effortless, ready-to-use summaries directly into your morning routine without requiring you to open an app." },
-              { label: "Zero Notification Spam", text: "Zero annoying push alerts; it produces continuous passive background value you notice automatically." },
+              { label: "Morning Summary", text: "Sends a ready-to-read summary every morning so you get value without opening an app." },
+              { label: "No Spam Alerts", text: "Zero annoying notifications; it only speaks up when something actually needs your attention." },
             ];
       default:
         return [];
@@ -236,7 +236,7 @@ export const BoardroomArena: React.FC<BoardroomArenaProps> = ({
       <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-5 border-b border-border gap-3">
         <div>
           <span className="text-[11px] font-semibold uppercase tracking-[0.12em] text-accent block mb-1">
-            {isTr ? "Karar Masası Değerlendirmesi" : "Boardroom Evaluation"}
+            {isTr ? "Jüri Değerlendirmesi" : "Pitch Review"}
           </span>
           <h2 className="text-xl sm:text-2xl font-semibold tracking-tight text-foreground flex flex-wrap items-center gap-2">
             <span>{pitch.productName}</span>
@@ -326,18 +326,16 @@ export const BoardroomArena: React.FC<BoardroomArenaProps> = ({
           <div className="flex items-center justify-between mb-3">
             <div className="flex items-center gap-1.5 text-xs font-semibold text-rose-600 dark:text-rose-400">
               <MessageSquare size={14} />
-              <span>{isTr ? `${activeName} Adına İtiraz:` : `${activeName}'s Objection:`}</span>
+              <span>{isTr ? `${activeName} Soruyor:` : `${activeName} Asks:`}</span>
             </div>
             <span className="text-[10px] text-muted font-mono">
-              {isTr ? "Doğrudan Sorgulama" : "Active Hot Seat"}
+              {isTr ? "Canlı Soru" : "Live Question"}
             </span>
           </div>
 
           {isLoadingObjection ? (
             <div className="py-4 text-center text-sm font-medium text-muted animate-pulse">
-              {isTr
-                ? "Jüri dosyanızı inceliyor ve en sert itirazını hazırlıyor..."
-                : "The board is examining your pitch to formulate their objection..."}
+              {t.objectionThinking}
             </div>
           ) : (
             <blockquote className="text-base sm:text-lg font-semibold text-foreground leading-relaxed tracking-tight">
@@ -345,14 +343,14 @@ export const BoardroomArena: React.FC<BoardroomArenaProps> = ({
             </blockquote>
           )}
 
-          {/* Tactical Hint */}
+          {/* Hint */}
           <div className="mt-4 pt-3 border-t border-border flex items-start gap-2.5 text-xs text-muted">
             <AlertOctagon size={15} className="text-accent shrink-0 mt-0.5" />
             <div>
               <span className="font-semibold text-foreground">
-                {isTr ? "Kritik İpucu: " : "Tactical Hint: "}
+                {isTr ? "İpucu: " : "Hint: "}
               </span>
-              <span>{activeJuror.psychology}</span>
+              <span>{isTr ? activeJuror.psychologyTr : activeJuror.psychology}</span>
             </div>
           </div>
         </div>
@@ -410,7 +408,7 @@ export const BoardroomArena: React.FC<BoardroomArenaProps> = ({
               <div className="flex items-center justify-between mb-2">
                 <span className="text-xs font-medium text-foreground flex items-center gap-1.5">
                   <Sparkles size={13} className="text-accent" />
-                  <span>{isTr ? "Hızlı Savunma Taktikleri:" : "Tactical Defense Weaponry:"}</span>
+                  <span>{isTr ? "Hazır Yanıt Örnekleri:" : "Quick Reply Ideas:"}</span>
                 </span>
                 <span className="text-[11px] text-muted font-mono">
                   {counterResponse.length} / 800
@@ -458,10 +456,10 @@ export const BoardroomArena: React.FC<BoardroomArenaProps> = ({
                 className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-7 py-3 rounded-full bg-[#0071e3] hover:bg-[#0077ed] text-white text-xs sm:text-sm font-medium shadow-[0_4px_16px_rgba(0,113,227,0.3)] hover:shadow-[0_6px_24px_rgba(0,113,227,0.4)] active:scale-95 transition-all cursor-pointer disabled:opacity-40 select-none"
               >
                 {isEvaluating ? (
-                  <span>{isTr ? "Jüri değerlendiriyor..." : "Evaluating..."}</span>
+                  <span>{t.evaluating}</span>
                 ) : (
                   <>
-                    <span>{isTr ? "Savunmayı Gönder" : "Send Defense"}</span>
+                    <span>{t.submitCounter}</span>
                     <Send size={13} />
                   </>
                 )}

@@ -1,7 +1,6 @@
 "use client";
 
 import React from "react";
-import { Check, X, MessageSquare } from "lucide-react";
 
 interface SharkAvatarProps {
   index: number;
@@ -13,40 +12,24 @@ interface SharkAvatarProps {
 
 export const SharkAvatar: React.FC<SharkAvatarProps> = ({
   index,
-  isActive = false,
   isConvinced = false,
   isRejected = false,
   size = 64,
 }) => {
-  let ringColor = "border-border bg-background";
-  let badgeElement: React.ReactNode = null;
-
-  if (isConvinced) {
-    ringColor = "border-emerald-500/60 bg-emerald-500/10";
-    badgeElement = <Check size={10} strokeWidth={3} className="text-emerald-600 dark:text-emerald-400" />;
-  } else if (isRejected) {
-    ringColor = "border-rose-500/60 bg-rose-500/10";
-    badgeElement = <X size={10} strokeWidth={3} className="text-rose-600 dark:text-rose-400" />;
-  } else if (isActive) {
-    ringColor = "border-accent bg-accent/10 ring-2 ring-accent/25";
-    badgeElement = <MessageSquare size={9} strokeWidth={2.5} className="text-accent" />;
-  }
-
   return (
     <div
-      className={`relative rounded-2xl border flex items-center justify-center transition-all duration-300 select-none overflow-hidden ${ringColor}`}
+      className="relative flex items-center justify-center select-none bg-transparent"
       style={{ width: size, height: size }}
     >
       <svg
         viewBox="0 0 100 100"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
-        className="w-full h-full p-1"
+        className="w-full h-full"
       >
-        {/* CHARACTER 1: ARTHUR VANCE / HALIS BEY (CFO Penny-Pincher) */}
+        {/* CHARACTER 1: ARTHUR VANCE / HALIS BEY */}
         {index === 1 && (
           <g>
-            <circle cx="50" cy="50" r="44" fill={isConvinced ? "#064e3b" : isRejected ? "#4c0519" : "#1e293b"} />
             <path d="M20 92 C20 70 32 64 50 64 C68 64 80 70 80 92 Z" fill="#334155" />
             <path d="M30 66 L30 92" stroke="#f59e0b" strokeWidth="4" />
             <path d="M70 66 L70 92" stroke="#f59e0b" strokeWidth="4" />
@@ -56,8 +39,8 @@ export const SharkAvatar: React.FC<SharkAvatarProps> = ({
             <circle cx="50" cy="40" r="22" fill="#fde68a" />
             <path d="M28 42 C26 30 32 20 40 19 C35 24 35 32 32 44 Z" fill="#94a3b8" />
             <path d="M72 42 C74 30 68 20 60 19 C65 24 65 32 68 44 Z" fill="#94a3b8" />
-            <circle cx="41" cy="38" r="6" stroke="#d97706" strokeWidth="2.5" fill="#ffffff" fillOpacity="0.1" />
-            <circle cx="59" cy="38" r="6" stroke="#d97706" strokeWidth="2.5" fill="#ffffff" fillOpacity="0.1" />
+            <circle cx="41" cy="38" r="6" stroke="#d97706" strokeWidth="2.5" fill="#ffffff" fillOpacity="0.15" />
+            <circle cx="59" cy="38" r="6" stroke="#d97706" strokeWidth="2.5" fill="#ffffff" fillOpacity="0.15" />
             <path d="M47 38 L53 38" stroke="#d97706" strokeWidth="2.5" />
             <circle cx={isRejected ? 42 : isConvinced ? 42 : 40} cy="38" r="2" fill="#0f172a" />
             <circle cx={isRejected ? 58 : isConvinced ? 58 : 60} cy="38" r="2" fill="#0f172a" />
@@ -88,10 +71,9 @@ export const SharkAvatar: React.FC<SharkAvatarProps> = ({
           </g>
         )}
 
-        {/* CHARACTER 2: MARCUS VANCE / BULENT DEMIR (Paranoid CISO) */}
+        {/* CHARACTER 2: MARCUS VANCE / BULENT DEMIR */}
         {index === 2 && (
           <g>
-            <circle cx="50" cy="50" r="44" fill={isConvinced ? "#064e3b" : isRejected ? "#4c0519" : "#0f172a"} />
             <path d="M18 92 C18 68 28 62 50 62 C72 62 82 68 82 92 Z" fill="#1e1e24" />
             <path d="M32 64 L46 78 L40 92 Z" fill="#2d3748" />
             <path d="M68 64 L54 78 L60 92 Z" fill="#2d3748" />
@@ -116,25 +98,24 @@ export const SharkAvatar: React.FC<SharkAvatarProps> = ({
           </g>
         )}
 
-        {/* CHARACTER 3: SARAH JENKINS / ASLI KARACA (Friction-Phobic Operator) */}
+        {/* CHARACTER 3: SARAH JENKINS / ASLI KARACA */}
         {index === 3 && (
           <g>
-            <circle cx="50" cy="50" r="44" fill={isConvinced ? "#064e3b" : isRejected ? "#4c0519" : "#1e1b4b"} />
             <path d="M18 92 C18 68 28 62 50 62 C72 62 82 68 82 92 Z" fill="#6366f1" />
             <path d="M38 62 Q50 72 62 62" stroke="#4f46e5" strokeWidth="4" fill="none" />
             <rect x="62" y="72" width="16" height="18" rx="3" fill="#fbbf24" />
             <path d="M78 76 C82 76 82 84 78 84" stroke="#fbbf24" strokeWidth="2" fill="none" />
-            <path d="M67 69 Q69 66 67 63" stroke="#fef08a" strokeWidth="1.5" strokeLinecap="round" />
-            <path d="M72 70 Q74 67 72 64" stroke="#fef08a" strokeWidth="1.5" strokeLinecap="round" />
+            <path d="M67 69 Q69 66 67 63" stroke="#d97706" strokeWidth="1.5" strokeLinecap="round" />
+            <path d="M72 70 Q74 67 72 64" stroke="#d97706" strokeWidth="1.5" strokeLinecap="round" />
             <rect x="43" y="53" width="14" height="14" fill="#fed7aa" />
             <circle cx="50" cy="41" r="19" fill="#ffedd5" />
             <circle cx="50" cy="16" r="10" fill="#78350f" />
             <path d="M31 38 C31 22 41 18 50 18 C59 18 69 22 69 38 C69 44 67 48 68 53 C62 44 60 40 50 36 C40 40 38 44 32 53 C33 48 31 44 31 38 Z" fill="#92400e" />
-            <rect x="34" y="36" width="13" height="10" rx="3" stroke="#b45309" strokeWidth="2" fill="#ffffff" fillOpacity="0.1" />
-            <rect x="53" y="36" width="13" height="10" rx="3" stroke="#b45309" strokeWidth="2" fill="#ffffff" fillOpacity="0.1" />
+            <rect x="34" y="36" width="13" height="10" rx="3" stroke="#b45309" strokeWidth="2" fill="#ffffff" fillOpacity="0.15" />
+            <rect x="53" y="36" width="13" height="10" rx="3" stroke="#b45309" strokeWidth="2" fill="#ffffff" fillOpacity="0.15" />
             <path d="M47 40 L53 40" stroke="#b45309" strokeWidth="2" />
-            <path d="M37 47 Q40 49 44 47" stroke="#cbd5e1" strokeWidth="1.5" fill="none" />
-            <path d="M56 47 Q59 49 63 47" stroke="#cbd5e1" strokeWidth="1.5" fill="none" />
+            <path d="M37 47 Q40 49 44 47" stroke="#94a3b8" strokeWidth="1.5" fill="none" />
+            <path d="M56 47 Q59 49 63 47" stroke="#94a3b8" strokeWidth="1.5" fill="none" />
             <circle cx="40" cy="41" r="2" fill="#1e293b" />
             <circle cx="60" cy="41" r="2" fill="#1e293b" />
             {isRejected ? (
@@ -147,10 +128,9 @@ export const SharkAvatar: React.FC<SharkAvatarProps> = ({
           </g>
         )}
 
-        {/* CHARACTER 4: DAVID STERLING / MERT VURAL (Incumbent Loyalist) */}
+        {/* CHARACTER 4: DAVID STERLING / MERT VURAL */}
         {index === 4 && (
           <g>
-            <circle cx="50" cy="50" r="44" fill={isConvinced ? "#064e3b" : isRejected ? "#4c0519" : "#0c4a6e"} />
             <path d="M18 92 C18 68 28 62 50 62 C72 62 82 68 82 92 Z" fill="#0369a1" />
             <path d="M44 62 L50 75 L56 62 Z" fill="#ffffff" />
             <path d="M48 72 L52 72 L54 92 L46 92 Z" fill="#b91c1c" />
@@ -175,18 +155,17 @@ export const SharkAvatar: React.FC<SharkAvatarProps> = ({
           </g>
         )}
 
-        {/* CHARACTER 5: ELENA GOMEZ / ECE TEZEL (The Hype Tourist) */}
+        {/* CHARACTER 5: ELENA GOMEZ / ECE TEZEL */}
         {index === 5 && (
           <g>
-            <circle cx="50" cy="50" r="44" fill={isConvinced ? "#064e3b" : isRejected ? "#4c0519" : "#581c87"} />
             <path d="M18 92 C18 68 28 62 50 62 C72 62 82 68 82 92 Z" fill="#c026d3" />
             <path d="M36 64 L45 78 L40 92 Z" fill="#9333ea" />
             <path d="M64 64 L55 78 L60 92 Z" fill="#9333ea" />
             <rect x="43" y="52" width="14" height="14" fill="#fde047" />
             <circle cx="50" cy="38" r="19" fill="#fef08a" />
             <path d="M29 36 C29 18 39 16 50 16 C61 16 71 18 71 36 C71 52 69 56 68 58 C66 42 64 30 50 28 C36 30 34 42 32 58 C31 56 29 52 29 36 Z" fill="#a855f7" />
-            <rect x="28" y="38" width="3" height="6" rx="1.5" fill="#ffffff" />
-            <rect x="69" y="38" width="3" height="6" rx="1.5" fill="#ffffff" />
+            <rect x="28" y="38" width="3" height="6" rx="1.5" fill="#e2e8f0" />
+            <rect x="69" y="38" width="3" height="6" rx="1.5" fill="#e2e8f0" />
             <path d="M34 33 L46 35 L44 42 L34 38 Z" fill="#1e1b4b" stroke="#f43f5e" strokeWidth="1.5" />
             <path d="M66 33 L54 35 L56 42 L66 38 Z" fill="#1e1b4b" stroke="#f43f5e" strokeWidth="1.5" />
             <line x1="46" y1="36" x2="54" y2="36" stroke="#f43f5e" strokeWidth="1.5" />
@@ -202,12 +181,6 @@ export const SharkAvatar: React.FC<SharkAvatarProps> = ({
           </g>
         )}
       </svg>
-
-      {badgeElement && (
-        <span className="absolute bottom-0.5 right-0.5 w-4 h-4 flex items-center justify-center bg-background rounded-full shadow-xs border border-border">
-          {badgeElement}
-        </span>
-      )}
     </div>
   );
 };
