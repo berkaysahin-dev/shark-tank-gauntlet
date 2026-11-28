@@ -188,8 +188,8 @@ export const translations: Record<Language, Translations> = {
       openaiLink: "Get key",
       privacyNote:
         "Direct Browser Mode: keys are kept only in this tab's sessionStorage and are never sent to our backend. Works offline without a key too.",
-      formatWarning: "Google Gemini API keys start with AIza.",
-      invalidGeminiError: "Invalid Gemini key format. Keys start with AIza and are ~39 characters long.",
+      formatWarning: "Google Gemini API keys start with AIza or AQ.",
+      invalidGeminiError: "Invalid Gemini key format. Keys must start with AIza or AQ..",
       invalidOpenaiError: "Invalid OpenAI key format. Keys must start with sk-.",
       saveButton: "Save",
       cancelButton: "Cancel",
@@ -293,8 +293,8 @@ export const translations: Record<Language, Translations> = {
       openaiLink: "Anahtar al",
       privacyNote:
         "Doğrudan Tarayıcı Modu: Anahtarlar sadece bu sekmenin sessionStorage belleğinde tutulur ve asla sunucumuza gönderilmez. Anahtar girmeden de kullanabilirsiniz.",
-      formatWarning: "Google Gemini anahtarları AIza ile başlar.",
-      invalidGeminiError: "Geçersiz Gemini anahtar biçimi. Anahtar AIza ile başlamalıdır.",
+      formatWarning: "Google Gemini anahtarları AIza veya AQ. ile başlar.",
+      invalidGeminiError: "Geçersiz Gemini anahtar biçimi. Anahtar AIza veya AQ. ile başlamalıdır.",
       invalidOpenaiError: "Geçersiz OpenAI anahtar biçimi. Anahtar sk- ile başlamalıdır.",
       saveButton: "Kaydet",
       cancelButton: "Vazgeç",

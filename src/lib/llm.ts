@@ -14,7 +14,7 @@ export interface LlmMeta {
   quotaLimit?: number;
 }
 
-const GEMINI_MODEL = "gemini-2.5-flash";
+const GEMINI_MODELS = ["gemini-3.8-flash", "gemini-flash-latest", "gemini-flash-lite-latest"];
 const OPENAI_MODEL = "gpt-4o-mini";
 const CLIENT_TIMEOUT_MS = 20000;
 
@@ -41,42 +41,63 @@ async function callGeminiDirect(
   prompt: string,
   opts: { json?: boolean; maxTokens: number; temperature: number }
 ): Promise<{ text: string | null; errorReason?: "invalid_key" | "rate_limited" | "provider_error" }> {
-  try {
-    const res = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "x-goog-api-key": key,
-        },
-        body: JSON.stringify({
-          contents: [{ parts: [{ text: prompt }] }],
-          generationConfig: {
-            maxOutputTokens: opts.maxTokens,
-            temperature: opts.temperature,
-            thinkingConfig: { thinkingBudget: 0 },
-            ...(opts.json ? { responseMimeType: "application/json" } : {}),
+  let lastError: "invalid_key" | "rate_limited" | "provider_error" = "provider_error";
+
+  for (const model of GEMINI_MODELS) {
+    try {
+      const res = await fetch(
+        `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "x-goog-api-key": key,
           },
-        }),
-        signal: AbortSignal.timeout(CLIENT_TIMEOUT_MS),
+          body: JSON.stringify({
+            contents: [{ parts: [{ text: prompt }] }],
+            generationConfig: {
+              maxOutputTokens: opts.maxTokens,
+              temperature: opts.temperature,
+              thinkingConfig: { thinkingBudget: 0 },
+              ...(opts.json ? { responseMimeType: "application/json" } : {}),
+            },
+          }),
+          signal: AbortSignal.timeout(CLIENT_TIMEOUT_MS),
+        }
+      );
+      if (!res.ok) {
+        if (res.status === 401 || res.status === 403) {
+          return { text: null, errorReason: "invalid_key" };
+        }
+        if (res.status === 400) {
+          const errText = await res.text().catch(() => "");
+          if (/API_KEY_INVALID|API key not valid/i.test(errText)) {
+            return { text: null, errorReason: "invalid_key" };
+          }
+          lastError = "provider_error";
+          continue;
+        }
+        if (res.status === 429) {
+          lastError = "rate_limited";
+          continue;
+        }
+        if (res.status === 404) {
+          lastError = "provider_error";
+          continue;
+        }
+        lastError = "provider_error";
+        continue;
       }
-    );
-    if (!res.ok) {
-      if (res.status === 400 || res.status === 401 || res.status === 403) {
-        return { text: null, errorReason: "invalid_key" };
-      }
-      if (res.status === 429) {
-        return { text: null, errorReason: "rate_limited" };
-      }
-      return { text: null, errorReason: "provider_error" };
+      const data = await res.json();
+      const text = data.candidates?.[0]?.content?.parts?.[0]?.text?.trim() || null;
+      if (text) return { text };
+      lastError = "provider_error";
+    } catch {
+      lastError = "provider_error";
     }
-    const data = await res.json();
-    const text = data.candidates?.[0]?.content?.parts?.[0]?.text?.trim() || null;
-    return text ? { text } : { text: null, errorReason: "provider_error" };
-  } catch {
-    return { text: null, errorReason: "provider_error" };
   }
+
+  return { text: null, errorReason: lastError };
 }
 
 async function callOpenAIDirect(

@@ -58,8 +58,8 @@ export function validateApiKeyFormat(key: string, provider: "gemini" | "openai")
   const trimmed = key.trim();
 
   if (provider === "gemini") {
-    // Google AI Studio / Gemini keys start with AIza and are typically 39 chars (allow 35-55)
-    return /^AIza[A-Za-z0-9_-]{31,51}$/.test(trimmed);
+    // Google AI Studio / Gemini keys start with AIza... or AQ....
+    return /^(?:AIza[A-Za-z0-9_-]{31,51}|AQ\.[A-Za-z0-9._-]{25,100})$/.test(trimmed);
   }
 
   if (provider === "openai") {

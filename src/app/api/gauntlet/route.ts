@@ -10,7 +10,7 @@ import {
 import { JurorConfig, PitchData, TurnExchange } from "@/types/gauntlet";
 import { Language } from "@/locales/i18n";
 
-const GEMINI_MODEL = "gemini-2.5-flash";
+const GEMINI_MODELS = ["gemini-3.8-flash", "gemini-flash-latest", "gemini-flash-lite-latest"];
 const OPENAI_MODEL = "gpt-4o-mini";
 const LLM_TIMEOUT_MS = 20000;
 const MAX_BODY_BYTES = 32 * 1024; // 32 KB strict request cap
@@ -28,35 +28,46 @@ interface ProviderCallResult {
 }
 
 async function callServerGemini(key: string, prompt: string, opts: GenerateOptions): Promise<ProviderCallResult> {
-  try {
-    const response = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent`,
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json", "x-goog-api-key": key },
-        body: JSON.stringify({
-          contents: [{ parts: [{ text: prompt }] }],
-          generationConfig: {
-            maxOutputTokens: opts.maxTokens,
-            temperature: opts.temperature,
-            thinkingConfig: { thinkingBudget: 0 },
-            ...(opts.json ? { responseMimeType: "application/json" } : {}),
-          },
-        }),
-        signal: AbortSignal.timeout(LLM_TIMEOUT_MS),
+  let lastError: "invalid_key" | "rate_limited" | "provider_error" = "provider_error";
+
+  for (const model of GEMINI_MODELS) {
+    try {
+      const response = await fetch(
+        `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json", "x-goog-api-key": key },
+          body: JSON.stringify({
+            contents: [{ parts: [{ text: prompt }] }],
+            generationConfig: {
+              maxOutputTokens: opts.maxTokens,
+              temperature: opts.temperature,
+              thinkingConfig: { thinkingBudget: 0 },
+              ...(opts.json ? { responseMimeType: "application/json" } : {}),
+            },
+          }),
+          signal: AbortSignal.timeout(LLM_TIMEOUT_MS),
+        }
+      );
+      if (!response.ok) {
+        if (response.status === 401 || response.status === 403) return { text: null, errorType: "invalid_key" };
+        if (response.status === 429) {
+          lastError = "rate_limited";
+          continue;
+        }
+        lastError = "provider_error";
+        continue;
       }
-    );
-    if (!response.ok) {
-      if (response.status === 401 || response.status === 403) return { text: null, errorType: "invalid_key" };
-      if (response.status === 429) return { text: null, errorType: "rate_limited" };
-      return { text: null, errorType: "provider_error" };
+      const data = await response.json();
+      const text = data.candidates?.[0]?.content?.parts?.[0]?.text?.trim() || null;
+      if (text) return { text };
+      lastError = "provider_error";
+    } catch {
+      lastError = "provider_error";
     }
-    const data = await response.json();
-    const text = data.candidates?.[0]?.content?.parts?.[0]?.text?.trim() || null;
-    return { text };
-  } catch {
-    return { text: null, errorType: "provider_error" };
   }
+
+  return { text: null, errorType: lastError };
 }
 
 async function callServerOpenAI(key: string, prompt: string, opts: GenerateOptions): Promise<ProviderCallResult> {
