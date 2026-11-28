@@ -15,7 +15,7 @@ import {
   VerdictSummary,
 } from "@/types/gauntlet";
 import { Language } from "@/locales/i18n";
-import { fetchVerdictSummary } from "@/lib/llm";
+import { fetchVerdictSummary, getStoredByokKeys } from "@/lib/llm";
 
 type GauntletStage = "SETUP" | "ARENA" | "VERDICT";
 
@@ -33,6 +33,7 @@ export default function HomePage() {
   const [jurorStates, setJurorStates] = useState<Record<string, JurorRuntimeState>>({});
   const [verdict, setVerdict] = useState<VerdictSummary | null>(null);
   const [isKeyModalOpen, setIsKeyModalOpen] = useState(false);
+  const [hasByokKey, setHasByokKey] = useState(() => getStoredByokKeys().hasValidKey);
 
   useEffect(() => {
     document.documentElement.lang = lang;
@@ -83,6 +84,7 @@ export default function HomePage() {
           onOpenKeys={() => setIsKeyModalOpen(true)}
           onReset={handleReset}
           isInDuel={stage !== "SETUP"}
+          hasByokKey={hasByokKey}
         />
 
         <main id="main-content" className="flex-1 flex flex-col justify-center">
@@ -94,6 +96,7 @@ export default function HomePage() {
             <BoardroomArena
               pitch={pitch}
               lang={lang}
+              onOpenKeys={() => setIsKeyModalOpen(true)}
               onFinishGauntlet={handleFinishGauntlet}
             />
           )}
@@ -116,6 +119,7 @@ export default function HomePage() {
           isOpen={isKeyModalOpen}
           lang={lang}
           onClose={() => setIsKeyModalOpen(false)}
+          onKeysUpdated={() => setHasByokKey(getStoredByokKeys().hasValidKey)}
         />
       </div>
     </>

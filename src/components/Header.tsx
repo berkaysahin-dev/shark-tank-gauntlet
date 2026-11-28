@@ -14,6 +14,7 @@ interface HeaderProps {
   onOpenKeys: () => void;
   onReset: () => void;
   isInDuel: boolean;
+  hasByokKey?: boolean;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -22,6 +23,7 @@ export const Header: React.FC<HeaderProps> = ({
   onOpenKeys,
   onReset,
   isInDuel,
+  hasByokKey = false,
 }) => {
   const t = translations[lang].header;
   const [scrolled, setScrolled] = useState(false);
@@ -132,12 +134,18 @@ export const Header: React.FC<HeaderProps> = ({
               title={t.byokButton}
               className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-surface hover:bg-surface-hover border border-border text-foreground text-[11px] font-medium transition-all active:scale-95 cursor-pointer whitespace-nowrap select-none"
             >
-              <KeyRound size={11} className="text-accent" />
+              <KeyRound size={11} className={hasByokKey ? "text-emerald-500" : "text-accent"} />
               <span className="hidden sm:inline">{t.byokButton}</span>
               <span className="sm:hidden">API</span>
+              {hasByokKey && (
+                <span
+                  className="w-1.5 h-1.5 rounded-full bg-emerald-500 shrink-0"
+                  aria-label="BYOK active"
+                />
+              )}
             </button>
 
-            <ThemeToggle />
+            <ThemeToggle lang={lang} />
 
             <LanguageToggle lang={lang} onLanguageChange={onLanguageChange} />
 

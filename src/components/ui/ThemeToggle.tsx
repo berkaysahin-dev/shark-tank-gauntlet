@@ -3,10 +3,15 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { useTheme } from "@/components/providers/ThemeProvider";
 import { useSyncExternalStore } from "react";
+import { Language } from "@/locales/i18n";
 
 const emptySubscribe = () => () => {};
 
-export function ThemeToggle() {
+interface ThemeToggleProps {
+  lang?: Language;
+}
+
+export function ThemeToggle({ lang = "en" }: ThemeToggleProps) {
   const { theme, toggleTheme } = useTheme();
   const mounted = useSyncExternalStore(emptySubscribe, () => true, () => false);
 
@@ -17,6 +22,14 @@ export function ThemeToggle() {
   }
 
   const isDark = theme === "dark";
+  const label =
+    lang === "tr"
+      ? isDark
+        ? "Aydınlık Moda Geç"
+        : "Karanlık Moda Geç"
+      : isDark
+      ? "Switch to Light Mode"
+      : "Switch to Dark Mode";
 
   return (
     <motion.button
@@ -25,8 +38,8 @@ export function ThemeToggle() {
       whileHover={{ scale: 1.05 }}
       whileTap={{ scale: 0.92 }}
       transition={{ type: "spring", stiffness: 450, damping: 25 }}
-      title={isDark ? "Aydınlık Moda Geç (Light Mode)" : "Karanlık Moda Geç (Dark Mode)"}
-      aria-label={isDark ? "Aydınlık Moda Geç" : "Karanlık Moda Geç"}
+      title={label}
+      aria-label={label}
       className="relative flex items-center justify-center w-8 h-8 rounded-full border border-border bg-surface hover:bg-surface-hover text-foreground backdrop-blur-md cursor-pointer select-none overflow-hidden transition-colors duration-200"
     >
       <AnimatePresence mode="wait" initial={false}>

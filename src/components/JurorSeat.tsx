@@ -4,12 +4,14 @@ import React from "react";
 import { JurorConfig, JurorStatus } from "@/types/gauntlet";
 import { Language, translations } from "@/locales/i18n";
 import { SharkAvatar } from "./SharkAvatar";
-import { Check, X, MessageSquare, Clock } from "lucide-react";
+import { Check, X, MessageSquare, Clock, CheckCheck } from "lucide-react";
+import { formatPercent } from "@/lib/utils";
 
 interface JurorSeatProps {
   config: JurorConfig;
   conviction: number;
   status: JurorStatus;
+  hasAnswered?: boolean;
   isActive: boolean;
   lang: Language;
   onSelect: () => void;
@@ -19,6 +21,7 @@ export const JurorSeat: React.FC<JurorSeatProps> = ({
   config,
   conviction,
   status,
+  hasAnswered = false,
   isActive,
   lang,
   onSelect,
@@ -69,6 +72,16 @@ export const JurorSeat: React.FC<JurorSeatProps> = ({
     );
     gaugeColor = "bg-rose-500";
     gaugeNumberColor = "text-rose-600 dark:text-rose-400";
+  } else if (hasAnswered) {
+    cardClass = "border-amber-500/35 bg-amber-500/[0.04] hover:bg-amber-500/[0.08]";
+    statusBadge = (
+      <span className="text-[10px] font-semibold text-amber-700 dark:text-amber-300 bg-amber-500/15 border border-amber-500/30 px-2 py-0.5 rounded-full flex items-center gap-1">
+        <CheckCheck size={10} />
+        <span>{t.reviewed}</span>
+      </span>
+    );
+    gaugeColor = "bg-amber-500";
+    gaugeNumberColor = "text-amber-600 dark:text-amber-400";
   } else if (status === "ACTIVE") {
     gaugeColor = conviction > 50 ? "bg-accent" : "bg-rose-500";
     gaugeNumberColor = "text-foreground";
@@ -97,7 +110,7 @@ export const JurorSeat: React.FC<JurorSeatProps> = ({
             {t.convictionRate}
           </div>
           <div className={`text-lg font-semibold tabular-nums tracking-tight ${gaugeNumberColor}`}>
-            %{conviction}
+            {formatPercent(conviction, lang)}
           </div>
         </div>
       </div>

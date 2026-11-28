@@ -1,21 +1,24 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, ShieldCheck, ExternalLink, Trash2, Lock } from "lucide-react";
+import { X, ShieldCheck, ExternalLink, Trash2, Lock, AlertCircle } from "lucide-react";
 import { Language, translations } from "@/locales/i18n";
 import { playTurnTick } from "@/lib/audio";
+import { validateApiKeyFormat } from "@/lib/security";
 
 interface KeySettingsModalProps {
   isOpen: boolean;
   lang: Language;
   onClose: () => void;
+  onKeysUpdated?: () => void;
 }
 
 export const KeySettingsModal: React.FC<KeySettingsModalProps> = ({
   isOpen,
   lang,
   onClose,
+  onKeysUpdated,
 }) => {
   const t = translations[lang].byokModal;
   const [geminiKey, setGeminiKey] = useState(() =>
@@ -25,37 +28,65 @@ export const KeySettingsModal: React.FC<KeySettingsModalProps> = ({
     typeof window !== "undefined" ? sessionStorage.getItem("gauntlet_openai_key") || "" : ""
   );
   const [saveStatus, setSaveStatus] = useState<string | null>(null);
+  const [validationError, setValidationError] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!isOpen) return;
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+    };
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [isOpen, onClose]);
 
   const handleSave = () => {
     playTurnTick();
+    setValidationError(null);
+
+    const trimmedGemini = geminiKey.trim();
+    const trimmedOpenai = openaiKey.trim();
+
+    if (trimmedGemini && !validateApiKeyFormat(trimmedGemini, "gemini")) {
+      setValidationError(t.invalidGeminiError);
+      return;
+    }
+
+    if (trimmedOpenai && !validateApiKeyFormat(trimmedOpenai, "openai")) {
+      setValidationError(t.invalidOpenaiError);
+      return;
+    }
+
     if (typeof window !== "undefined") {
-      if (geminiKey.trim()) {
-        sessionStorage.setItem("gauntlet_gemini_key", geminiKey.trim());
+      if (trimmedGemini) {
+        sessionStorage.setItem("gauntlet_gemini_key", trimmedGemini);
       } else {
         sessionStorage.removeItem("gauntlet_gemini_key");
       }
 
-      if (openaiKey.trim()) {
-        sessionStorage.setItem("gauntlet_openai_key", openaiKey.trim());
+      if (trimmedOpenai) {
+        sessionStorage.setItem("gauntlet_openai_key", trimmedOpenai);
       } else {
         sessionStorage.removeItem("gauntlet_openai_key");
       }
 
+      onKeysUpdated?.();
       setSaveStatus(t.savedMessage);
       setTimeout(() => {
         setSaveStatus(null);
         onClose();
-      }, 900);
+      }, 800);
     }
   };
 
   const handleClear = () => {
     playTurnTick();
+    setValidationError(null);
     if (typeof window !== "undefined") {
       sessionStorage.removeItem("gauntlet_gemini_key");
       sessionStorage.removeItem("gauntlet_openai_key");
       setGeminiKey("");
       setOpenaiKey("");
+      onKeysUpdated?.();
       setSaveStatus(t.clearedMessage);
       setTimeout(() => setSaveStatus(null), 1200);
     }
@@ -64,7 +95,12 @@ export const KeySettingsModal: React.FC<KeySettingsModalProps> = ({
   return (
     <AnimatePresence>
       {isOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-black/50 backdrop-blur-md">
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-black/50 backdrop-blur-md"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="byok-modal-title"
+        >
           <motion.div
             initial={{ opacity: 0, scale: 0.96, y: 10 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -76,14 +112,14 @@ export const KeySettingsModal: React.FC<KeySettingsModalProps> = ({
               type="button"
               onClick={onClose}
               className="absolute top-5 right-5 text-muted hover:text-foreground transition-colors p-1.5 rounded-full hover:bg-surface cursor-pointer"
-              aria-label="Close"
+              aria-label={lang === "tr" ? "Kapat" : "Close"}
             >
               <X size={18} />
             </button>
 
             <div className="flex items-center gap-2 mb-2 text-accent">
               <Lock size={17} />
-              <h3 className="text-lg font-semibold tracking-tight text-foreground">
+              <h3 id="byok-modal-title" className="text-lg font-semibold tracking-tight text-foreground">
                 {t.title}
               </h3>
             </div>
@@ -91,6 +127,13 @@ export const KeySettingsModal: React.FC<KeySettingsModalProps> = ({
             <p className="text-xs text-muted leading-relaxed mb-5">
               {t.description}
             </p>
+
+            {validationError && (
+              <div className="mb-4 p-3 rounded-2xl bg-rose-500/10 border border-rose-500/30 text-rose-600 dark:text-rose-400 text-xs font-medium flex items-center gap-2">
+                <AlertCircle size={15} className="shrink-0" />
+                <span>{validationError}</span>
+              </div>
+            )}
 
             <div className="space-y-4 mb-5">
               <div>
@@ -111,7 +154,10 @@ export const KeySettingsModal: React.FC<KeySettingsModalProps> = ({
                 <input
                   type="password"
                   value={geminiKey}
-                  onChange={(e) => setGeminiKey(e.target.value)}
+                  onChange={(e) => {
+                    setGeminiKey(e.target.value);
+                    setValidationError(null);
+                  }}
                   placeholder="AIzaSy..."
                   className="w-full bg-background border border-border rounded-2xl px-4 py-2.5 text-xs text-foreground placeholder:text-muted/50 focus:outline-none focus:border-accent focus:ring-4 focus:ring-accent/15 transition-all font-mono"
                 />
@@ -135,7 +181,10 @@ export const KeySettingsModal: React.FC<KeySettingsModalProps> = ({
                 <input
                   type="password"
                   value={openaiKey}
-                  onChange={(e) => setOpenaiKey(e.target.value)}
+                  onChange={(e) => {
+                    setOpenaiKey(e.target.value);
+                    setValidationError(null);
+                  }}
                   placeholder="sk-proj-..."
                   className="w-full bg-background border border-border rounded-2xl px-4 py-2.5 text-xs text-foreground placeholder:text-muted/50 focus:outline-none focus:border-accent focus:ring-4 focus:ring-accent/15 transition-all font-mono"
                 />

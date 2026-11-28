@@ -53,6 +53,7 @@ export interface Translations {
   jurorStatus: {
     awaiting: string;
     active: string;
+    reviewed: string;
     convinced: string;
     rejected: string;
     convictionRate: string;
@@ -67,6 +68,7 @@ export interface Translations {
     vulnerabilityTitle: string;
     remedyTitle: string;
     copyShareText: string;
+    downloadCard: string;
     copied: string;
     resetButton: string;
     shareTemplate: (name: string, convinced: number, total: number, avg: number, verdict: string, vuln: string) => string;
@@ -80,6 +82,8 @@ export interface Translations {
     openaiLink: string;
     privacyNote: string;
     formatWarning: string;
+    invalidGeminiError: string;
+    invalidOpenaiError: string;
     saveButton: string;
     cancelButton: string;
     clearButton: string;
@@ -152,6 +156,7 @@ export const translations: Record<Language, Translations> = {
     jurorStatus: {
       awaiting: "Waiting",
       active: "Speaking",
+      reviewed: "Reviewed",
       convinced: "Convinced",
       rejected: "Passed",
       convictionRate: "Score",
@@ -167,6 +172,7 @@ export const translations: Record<Language, Translations> = {
       vulnerabilityTitle: "Biggest Weak Spot",
       remedyTitle: "How to Fix It",
       copyShareText: "Share Result",
+      downloadCard: "Download Card (PNG)",
       copied: "Copied!",
       resetButton: "Try Another Pitch",
       shareTemplate: (name, convinced, total, avg, verdict, vuln) =>
@@ -175,14 +181,16 @@ export const translations: Record<Language, Translations> = {
     byokModal: {
       title: "API Keys (Optional)",
       description:
-        "Add your own Gemini or OpenAI key if you want live AI replies. Keys stay only in this browser tab's memory and are removed when you close it.",
+        "Add your own Gemini or OpenAI key for unlimited Live AI replies. Requests go directly from your browser to Google/OpenAI and never touch our server.",
       geminiLabel: "Google Gemini API Key (Recommended)",
       geminiLink: "Get free key",
       openaiLabel: "OpenAI API Key (Optional)",
       openaiLink: "Get key",
       privacyNote:
-        "The app works fine without any key. Nothing you enter is ever saved on a server.",
-      formatWarning: "Google Gemini API keys usually start with AIzaSy.",
+        "Direct Browser Mode: keys are kept only in this tab's sessionStorage and are never sent to our backend. Works offline without a key too.",
+      formatWarning: "Google Gemini API keys start with AIza.",
+      invalidGeminiError: "Invalid Gemini key format. Keys start with AIza and are ~39 characters long.",
+      invalidOpenaiError: "Invalid OpenAI key format. Keys must start with sk-.",
       saveButton: "Save",
       cancelButton: "Cancel",
       clearButton: "Clear Keys",
@@ -253,6 +261,7 @@ export const translations: Record<Language, Translations> = {
     jurorStatus: {
       awaiting: "Bekliyor",
       active: "Soruyor",
+      reviewed: "Yanıtlandı",
       convinced: "İkna Oldu",
       rejected: "Vazgeçti",
       convictionRate: "İkna",
@@ -268,6 +277,7 @@ export const translations: Record<Language, Translations> = {
       vulnerabilityTitle: "En Zayıf Nokta",
       remedyTitle: "Nasıl Düzeltilir?",
       copyShareText: "Sonucu Paylaş",
+      downloadCard: "Kartı İndir (PNG)",
       copied: "Kopyalandı!",
       resetButton: "Yeni Fikir Test Et",
       shareTemplate: (name, convinced, total, avg, verdict, vuln) =>
@@ -276,14 +286,16 @@ export const translations: Record<Language, Translations> = {
     byokModal: {
       title: "API Anahtarları (İsteğe Bağlı)",
       description:
-        "Canlı yapay zeka yanıtları almak isterseniz kendi Gemini veya OpenAI anahtarınızı girebilirsiniz. Anahtarlar sadece bu sekmede geçici olarak tutulur, sekmeyi kapatınca silinir.",
+        "Sınırsız canlı yapay zeka yanıtları için kendi Gemini veya OpenAI anahtarınızı girebilirsiniz. İstekler doğrudan tarayıcınızdan Google/OpenAI'a gider, sunucumuzdan geçmez.",
       geminiLabel: "Google Gemini API Anahtarı (Önerilen)",
       geminiLink: "Ücretsiz anahtar al",
       openaiLabel: "OpenAI API Anahtarı (İsteğe Bağlı)",
       openaiLink: "Anahtar al",
       privacyNote:
-        "Anahtar girmeden de uygulamayı tam olarak kullanabilirsiniz. Girdiğiniz bilgiler hiçbir sunucuya kaydedilmez.",
-      formatWarning: "Google Gemini anahtarları genellikle AIzaSy ile başlar.",
+        "Doğrudan Tarayıcı Modu: Anahtarlar sadece bu sekmenin sessionStorage belleğinde tutulur ve asla sunucumuza gönderilmez. Anahtar girmeden de kullanabilirsiniz.",
+      formatWarning: "Google Gemini anahtarları AIza ile başlar.",
+      invalidGeminiError: "Geçersiz Gemini anahtar biçimi. Anahtar AIza ile başlamalıdır.",
+      invalidOpenaiError: "Geçersiz OpenAI anahtar biçimi. Anahtar sk- ile başlamalıdır.",
       saveButton: "Kaydet",
       cancelButton: "Vazgeç",
       clearButton: "Anahtarları Sil",

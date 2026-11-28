@@ -1,12 +1,14 @@
 "use client";
 
 import React, { useState } from "react";
-import { Check, X, RotateCcw, Share2, Award, AlertTriangle, ShieldAlert, Sparkles, CheckCircle2, XCircle, FileCheck } from "lucide-react";
+import { Check, X, RotateCcw, Share2, Download, Award, AlertTriangle, ShieldAlert, Sparkles, CheckCircle2, XCircle, FileCheck } from "lucide-react";
 import { PitchData, TurnExchange, JurorRuntimeState, VerdictSummary } from "@/types/gauntlet";
 import { JURORS } from "@/config/personas";
 import { Language, translations } from "@/locales/i18n";
 import { SharkAvatar } from "./SharkAvatar";
 import { playTurnTick } from "@/lib/audio";
+import { formatPercent } from "@/lib/utils";
+import { downloadRoastCardPng } from "@/lib/roastCard";
 
 interface VerdictDossierProps {
   pitch: PitchData;
@@ -19,6 +21,7 @@ interface VerdictDossierProps {
 
 export const VerdictDossier: React.FC<VerdictDossierProps> = ({
   pitch,
+  history,
   verdict,
   jurorStates,
   lang,
@@ -145,7 +148,7 @@ export const VerdictDossier: React.FC<VerdictDossierProps> = ({
                       : "text-rose-600 dark:text-rose-400"
                   }`}
                 >
-                  %{verdict.averageConviction}
+                  {formatPercent(verdict.averageConviction, lang)}
                 </span>
               </div>
             </div>
@@ -209,7 +212,7 @@ export const VerdictDossier: React.FC<VerdictDossierProps> = ({
                       </div>
 
                       <div className="text-sm font-semibold tabular-nums text-foreground w-10 text-right">
-                        %{conv}
+                        {formatPercent(conv, lang)}
                       </div>
 
                       <span
@@ -263,23 +266,37 @@ export const VerdictDossier: React.FC<VerdictDossierProps> = ({
 
           {/* Action Buttons */}
           <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-4 border-t border-border">
-            <button
-              type="button"
-              onClick={handleCopyShare}
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-7 py-3 rounded-full bg-[#0071e3] hover:bg-[#0077ed] text-white text-xs sm:text-sm font-medium shadow-[0_4px_16px_rgba(0,113,227,0.3)] hover:shadow-[0_6px_24px_rgba(0,113,227,0.4)] active:scale-95 transition-all cursor-pointer select-none"
-            >
-              {copied ? (
-                <>
-                  <Check size={15} />
-                  <span>{t.copied}</span>
-                </>
-              ) : (
-                <>
-                  <Share2 size={15} />
-                  <span>{t.copyShareText}</span>
-                </>
-              )}
-            </button>
+            <div className="flex flex-col sm:flex-row items-center gap-2.5 w-full sm:w-auto">
+              <button
+                type="button"
+                onClick={handleCopyShare}
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full bg-[#0071e3] hover:bg-[#0077ed] text-white text-xs sm:text-sm font-medium shadow-[0_4px_16px_rgba(0,113,227,0.3)] hover:shadow-[0_6px_24px_rgba(0,113,227,0.4)] active:scale-95 transition-all cursor-pointer select-none"
+              >
+                {copied ? (
+                  <>
+                    <Check size={15} />
+                    <span>{t.copied}</span>
+                  </>
+                ) : (
+                  <>
+                    <Share2 size={15} />
+                    <span>{t.copyShareText}</span>
+                  </>
+                )}
+              </button>
+
+              <button
+                type="button"
+                onClick={() => {
+                  playTurnTick();
+                  downloadRoastCardPng({ pitch, verdict, jurorStates, history, lang });
+                }}
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full border border-border bg-background hover:bg-surface-hover text-foreground text-xs sm:text-sm font-medium active:scale-95 transition-all cursor-pointer select-none"
+              >
+                <Download size={15} className="text-accent" />
+                <span>{t.downloadCard}</span>
+              </button>
+            </div>
 
             <button
               type="button"

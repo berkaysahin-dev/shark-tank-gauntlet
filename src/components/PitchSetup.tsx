@@ -155,7 +155,7 @@ export const PitchSetup: React.FC<PitchSetupProps> = ({ lang, onStartGauntlet })
             {isTr ? "5 Jüri Üyesi" : "5 Tough Buyers"}
           </span>
         </div>
-        <div className="grid grid-cols-2 sm:grid-cols-5 gap-2.5 sm:gap-3">
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2.5 sm:gap-3">
           {JURORS.map((juror) => (
             <div
               key={juror.id}

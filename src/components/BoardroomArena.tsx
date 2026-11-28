@@ -1,24 +1,43 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from "react";
-import { Send, ArrowRight, CornerDownLeft, Sparkles, AlertOctagon, MessageSquare, Check, X } from "lucide-react";
+import {
+  Send,
+  ArrowRight,
+  CornerDownLeft,
+  Sparkles,
+  AlertOctagon,
+  MessageSquare,
+  Check,
+  X,
+  AlertTriangle,
+  KeyRound,
+} from "lucide-react";
 import { PitchData, JurorRuntimeState, TurnExchange } from "@/types/gauntlet";
 import { JURORS } from "@/config/personas";
 import { Language, translations } from "@/locales/i18n";
 import { JurorSeat } from "./JurorSeat";
 import { SharkAvatar } from "./SharkAvatar";
-import { fetchJurorObjection, evaluateCounterResponse } from "@/lib/llm";
+import {
+  fetchJurorObjection,
+  evaluateCounterResponse,
+  ExecutionMode,
+  FallbackReason,
+} from "@/lib/llm";
 import { playGavel, playBuzzer, playDealChime, playTurnTick } from "@/lib/audio";
+import { formatPercent } from "@/lib/utils";
 
 interface BoardroomArenaProps {
   pitch: PitchData;
   lang: Language;
+  onOpenKeys?: () => void;
   onFinishGauntlet: (history: TurnExchange[], jurorStates: Record<string, JurorRuntimeState>) => void;
 }
 
 export const BoardroomArena: React.FC<BoardroomArenaProps> = ({
   pitch,
   lang,
+  onOpenKeys,
   onFinishGauntlet,
 }) => {
   const t = translations[lang].arena;
@@ -43,6 +62,8 @@ export const BoardroomArena: React.FC<BoardroomArenaProps> = ({
   const [isEvaluating, setIsEvaluating] = useState(false);
   const [lastExchange, setLastExchange] = useState<TurnExchange | null>(null);
   const [allHistory, setAllHistory] = useState<TurnExchange[]>([]);
+  const [execMode, setExecMode] = useState<ExecutionMode>("offline");
+  const [fallbackNotice, setFallbackNotice] = useState<FallbackReason | null>(null);
 
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const activeJuror = JURORS[activeJurorIndex];
@@ -54,13 +75,19 @@ export const BoardroomArena: React.FC<BoardroomArenaProps> = ({
     async function loadObjection() {
       if (!activeState.currentObjection) {
         setIsLoadingObjection(true);
-        const obj = await fetchJurorObjection(activeJuror, pitch, lang);
+        const res = await fetchJurorObjection(activeJuror, pitch, lang);
         if (isMounted) {
+          setExecMode(res.mode);
+          if (res.fallbackReason && res.fallbackReason !== "no_key") {
+            setFallbackNotice(res.fallbackReason);
+          } else if (res.mode !== "offline") {
+            setFallbackNotice(null);
+          }
           setJurorStates((prev) => ({
             ...prev,
             [activeJuror.id]: {
               ...prev[activeJuror.id],
-              currentObjection: obj,
+              currentObjection: res.objection,
               status: "ACTIVE",
             },
           }));
@@ -151,6 +178,13 @@ export const BoardroomArena: React.FC<BoardroomArenaProps> = ({
       lang
     );
 
+    setExecMode(evalResult.mode);
+    if (evalResult.fallbackReason && evalResult.fallbackReason !== "no_key") {
+      setFallbackNotice(evalResult.fallbackReason);
+    } else if (evalResult.mode !== "offline") {
+      setFallbackNotice(null);
+    }
+
     const resultingConviction = evalResult.resultingConviction;
     const isConvinced = resultingConviction >= 65;
     const isRejected = resultingConviction <= 20 || evalResult.isFatal;
@@ -230,6 +264,48 @@ export const BoardroomArena: React.FC<BoardroomArenaProps> = ({
   const isConvinced = currentStatus === "CONVINCED" || activeState.conviction >= 65;
   const isRejected = currentStatus === "REJECTED" || Boolean(lastExchange && activeState.conviction <= 20);
 
+  const exchangeIsImpressed =
+    lastExchange !== null &&
+    (lastExchange.resultingConviction >= 65 || lastExchange.scoreDelta >= 20) &&
+    !lastExchange.isFatal;
+  const exchangeIsSkeptical =
+    lastExchange !== null &&
+    !exchangeIsImpressed &&
+    lastExchange.scoreDelta > 0 &&
+    !lastExchange.isFatal;
+
+  const modeBadgeLabel =
+    execMode === "byok-gemini"
+      ? isTr
+        ? "Canlı AI · Gemini (BYOK)"
+        : "Live AI · Gemini (BYOK)"
+      : execMode === "byok-openai"
+      ? isTr
+        ? "Canlı AI · OpenAI (BYOK)"
+        : "Live AI · OpenAI (BYOK)"
+      : execMode === "server-ai"
+      ? isTr
+        ? "Ücretsiz Canlı AI"
+        : "Free Live AI"
+      : isTr
+      ? "Çevrimdışı Simülatör"
+      : "Offline Simulator";
+
+  const fallbackNoticeText =
+    fallbackNotice === "invalid_key"
+      ? isTr
+        ? "Girdiğiniz API anahtarı reddedildi. Şu anda Çevrimdışı Simülatör çalışıyor — anahtarınızı kontrol edin."
+        : "Your API key was rejected by the provider. Running Offline Simulator instead — please check your API key."
+      : fallbackNotice === "rate_limited"
+      ? isTr
+        ? "Ücretsiz canlı AI günlük limiti doldu. Çevrimdışı Simülatör ile devam ediliyor — sınırsız canlı AI için kendi anahtarınızı girebilirsiniz."
+        : "Daily Free Live AI limit reached. Continuing with Offline Simulator — add your own key for unlimited Live AI."
+      : fallbackNotice === "provider_error"
+      ? isTr
+        ? "AI sağlayıcısına şu an ulaşılamadı; yanıtlar Çevrimdışı Simülatör ile üretildi."
+        : "AI provider unreachable right now; responses fell back to Offline Simulator."
+      : null;
+
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 md:px-8 pt-20 sm:pt-28 pb-12 sm:pb-16 space-y-6 sm:space-y-8">
       {/* Product Summary Header Deck */}
@@ -245,7 +321,16 @@ export const BoardroomArena: React.FC<BoardroomArenaProps> = ({
             </span>
           </h2>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2">
+          <span
+            className={`text-[11px] font-medium px-2.5 py-1 rounded-full border ${
+              execMode === "offline"
+                ? "text-muted bg-surface border-border"
+                : "text-emerald-700 dark:text-emerald-300 bg-emerald-500/10 border-emerald-500/30"
+            }`}
+          >
+            {modeBadgeLabel}
+          </span>
           <span className="text-xs font-medium text-foreground bg-surface px-3 py-1 rounded-full border border-border font-mono">
             {isTr
               ? `Jüri ${activeJurorIndex + 1} / ${JURORS.length}`
@@ -253,6 +338,26 @@ export const BoardroomArena: React.FC<BoardroomArenaProps> = ({
           </span>
         </div>
       </div>
+
+      {/* Honest Fallback / Key Warning Banner */}
+      {fallbackNoticeText && (
+        <div className="p-3.5 rounded-2xl bg-amber-500/10 border border-amber-500/30 text-amber-800 dark:text-amber-200 text-xs flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
+          <div className="flex items-start sm:items-center gap-2">
+            <AlertTriangle size={15} className="shrink-0 mt-0.5 sm:mt-0 text-amber-600 dark:text-amber-400" />
+            <span>{fallbackNoticeText}</span>
+          </div>
+          {onOpenKeys && (
+            <button
+              type="button"
+              onClick={onOpenKeys}
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-background border border-border text-foreground text-[11px] font-medium hover:bg-surface-hover transition-colors shrink-0 cursor-pointer self-start sm:self-auto"
+            >
+              <KeyRound size={12} className="text-accent" />
+              <span>{isTr ? "API Anahtarları" : "API Keys"}</span>
+            </button>
+          )}
+        </div>
+      )}
 
       {/* 5 Jurors Seating Gallery */}
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2.5 sm:gap-3">
@@ -264,6 +369,7 @@ export const BoardroomArena: React.FC<BoardroomArenaProps> = ({
               config={juror}
               conviction={state.conviction}
               status={state.status}
+              hasAnswered={state.history.length > 0}
               isActive={idx === activeJurorIndex}
               lang={lang}
               onSelect={() => selectJuror(idx)}
@@ -316,7 +422,7 @@ export const BoardroomArena: React.FC<BoardroomArenaProps> = ({
                   : "text-accent"
               }`}
             >
-              %{activeState.conviction}
+              {formatPercent(activeState.conviction, lang)}
             </span>
           </div>
         </div>
@@ -359,17 +465,24 @@ export const BoardroomArena: React.FC<BoardroomArenaProps> = ({
         {lastExchange && (
           <div
             className={`mb-6 p-5 sm:p-6 rounded-2xl border transition-all ${
-              lastExchange.scoreDelta > 0
+              exchangeIsImpressed
                 ? "bg-emerald-500/[0.06] border-emerald-500/35"
+                : exchangeIsSkeptical
+                ? "bg-amber-500/[0.06] border-amber-500/35"
                 : "bg-rose-500/[0.06] border-rose-500/35"
             }`}
           >
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4 pb-3 border-b border-border">
               <div className="flex items-center gap-3">
-                {lastExchange.scoreDelta > 0 ? (
+                {exchangeIsImpressed ? (
                   <span className="rubber-stamp stamp-deal text-xs">
                     <Check size={13} strokeWidth={2.5} />
-                    <span>{isTr ? "KABUL: MASADA KALDI" : "DEAL: IMPRESSED"}</span>
+                    <span>{isTr ? "KABUL: ETKİLENDİ" : "DEAL: IMPRESSED"}</span>
+                  </span>
+                ) : exchangeIsSkeptical ? (
+                  <span className="rubber-stamp stamp-conditional text-xs">
+                    <AlertTriangle size={13} strokeWidth={2.5} />
+                    <span>{isTr ? "ŞÜPHELİ: KANIT EKSİK" : "SKEPTICAL: NEEDS PROOF"}</span>
                   </span>
                 ) : (
                   <span className="rubber-stamp stamp-reject text-xs">
@@ -379,19 +492,23 @@ export const BoardroomArena: React.FC<BoardroomArenaProps> = ({
                 )}
                 <span
                   className={`text-sm font-semibold tabular-nums ${
-                    lastExchange.scoreDelta > 0
+                    exchangeIsImpressed
                       ? "text-emerald-600 dark:text-emerald-400"
+                      : exchangeIsSkeptical
+                      ? "text-amber-600 dark:text-amber-400"
                       : "text-rose-600 dark:text-rose-400"
                   }`}
                 >
-                  {lastExchange.scoreDelta > 0 ? `+${lastExchange.scoreDelta}%` : `${lastExchange.scoreDelta}%`}
+                  {lastExchange.scoreDelta > 0
+                    ? `+${lastExchange.scoreDelta}%`
+                    : `${lastExchange.scoreDelta}%`}
                 </span>
               </div>
 
               <div className="text-xs font-medium text-muted font-mono">
                 {isTr
-                  ? `Yeni İkna Oranı: %${lastExchange.resultingConviction}`
-                  : `New Conviction: ${lastExchange.resultingConviction}%`}
+                  ? `Yeni İkna Oranı: ${formatPercent(lastExchange.resultingConviction, lang)}`
+                  : `New Conviction: ${formatPercent(lastExchange.resultingConviction, lang)}`}
               </div>
             </div>
 
